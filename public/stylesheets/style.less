@@ -1,0 +1,254 @@
+body{
+    padding-top: 80px;
+    &.vis {
+        padding-top: 40px;
+    }
+}
+
+body.loaded {
+    #loader {
+        display: none;
+    }
+    nav {
+        display: inline-block;
+    }
+    section {
+        display: inline-block;
+    }
+}
+
+a{
+    color: #000;
+    font-weight: bold;
+}
+
+div#container {
+    text-align: center;
+    min-width: 1000px;
+}
+
+.center {
+    margin: 0 auto;
+    text-align: left;
+    width: 940px;
+}
+
+div.topbar {
+    div.topbar-inner {
+        div.container {
+            div#search{
+                margin-top: 5px;
+            }
+            a#visuals{
+                display: none;
+                background: url('../images/17-bar-chart.png') no-repeat;
+                height: 24px;
+                margin: 8px 0 0 0;
+                padding: 0;
+                text-indent: -1000em;
+                width: 29px;
+            }
+        }
+    }
+}
+
+
+#vis {
+
+    margin-top: 5px;
+
+    ul.tabs {
+        background: #fff;
+        padding-top: 5px;
+        position: fixed;
+        top:40px;
+        width: 940px;
+        z-index: 2;
+    }
+
+}
+
+body.vis{
+    div#search {
+        display: none;
+    }
+}
+
+#links {
+
+    header {
+        background: #fff;
+        border: 1px solid #666;
+        box-shadow: 0 0 5px #888;
+        margin: 0;
+        position: fixed;
+        right:0;
+        top:40px;
+        left:0;
+        z-index: 2;
+    }
+
+    h1 {
+
+        font-size: 19px;
+        height: 30px;
+        padding: 0 0 10px 0;
+
+        svg {
+            margin-right: -5px;
+            margin-top: 5px;
+            width: 20px;
+            vertical-align: -7px;
+        }
+    
+        #contextTags {
+            color: #666;
+            vertical-align: 4px;
+        }
+    }
+
+    li {
+        list-style-type: none;
+        &.first-child {
+
+        }
+    }
+
+    #loader {
+        margin: 25px 0 0 25px;
+    }
+
+    nav {
+
+        padding: 0;
+
+        a {
+            color: #666;
+            font-weight: normal; 
+        }
+
+        #tags {
+            li.adjacent, li.active {
+                display: none;
+            }
+        }
+
+        ul{
+            margin: 10px 0 0 5px;
+        }
+        li {
+            padding: 3px; 
+            position: relative;
+            width: 145px;
+            &.active {
+                background: #bbd8e9;
+                span.subtract {
+                    display: inline-block;
+                }
+            }
+            &.adjacent {
+                background: #e4e4e4;
+                span.add {
+                    display: inline-block;
+                }
+            }
+            a {
+                display: inline-block;
+                width: 110px;
+            }
+            span {
+                display: inline-block;
+                padding-right: 1px;
+                &.count {
+                    text-align: right;
+                    width: 20px;
+                }
+                &.add {
+                    cursor: pointer;
+                    display: none;
+                    margin-left: 3px;
+                }
+                &.subtract {
+                    cursor: pointer;
+                    display: none;
+                    margin-left: 3px;
+                }
+            }
+
+        }
+    } 
+
+    section {
+
+        padding: 0 15px;
+        vertical-align: top;
+        width: 730px;
+
+        .pagination {
+            
+            a {
+                border-color: #bbd8e9;
+                color: #666;
+            }
+        }
+
+        ul {
+
+            padding: 0;
+            margin: 0;
+
+            li {
+
+                &:first-child {
+                    border-top: 0;
+                    padding-top: 0;
+                }
+            
+                color: #000;
+                margin-bottom: 20px;
+                padding: 5px 0;
+                border-top: 1px solid #ccc;
+
+                div {
+                    color: #666;
+                    font-size: 12px;
+                    a.uri {
+                        color: #666;
+                        font-weight: normal;
+                    }
+                }
+            
+                div.tags {
+                    margin-top: 4px;
+                    a{
+                        background: #ccc;
+                        border: 1px solid #666;
+                        border-radius: 2px;
+                        display: inline-block;
+                        font-weight: normal;
+                        margin-right: 5px;
+                        padding: 3px;
+                    }
+                }
+
+            }
+        }
+
+    }
+
+} /* /#links */
+
+//Chart::Bubble
+svg g {
+    cursor: pointer;
+}
+
+circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+text {
+    font: 10px sans-serif;
+}
+

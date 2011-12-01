@@ -1,0 +1,13 @@
+{
+    "name": "collect"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.4.6"
+    , "connect-gzip": "0.1.5"
+    , "less": ">= 0.0.1"
+    , "jade": ">= 0.0.1"
+    , "node-uuid": ">= 1.2.0"
+    , "cradle": ">= 0.5.7"
+  }
+}
