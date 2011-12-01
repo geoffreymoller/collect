@@ -90,8 +90,11 @@ collect.Model.prototype.relatedTags  = function(contextTags){
     var model = this;
     var payload = [];
     contextTags.forEach(function(context){
-        if(context){
+        if(context && model.tagDict[context]){
             payload.push({name: context, type: 'active', count: model.tagDict[context].count});
+        }
+        else {
+            return payload;
         }
     });
 
