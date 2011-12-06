@@ -44,7 +44,8 @@ app.configure('production', function(){
 app.get('/', function(req, res){
 
     res.render('index', {
-      title: 'Collect'
+      title: 'Collect',
+      serverTime: (new Date()).getTime()
     });
 
 });

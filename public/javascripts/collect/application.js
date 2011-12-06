@@ -1,4 +1,4 @@
-collect.application = Backbone.Router.extend({
+collect.Application = Backbone.Router.extend({
 
     initialize: function(){
         this.listen();
@@ -121,7 +121,7 @@ collect.application = Backbone.Router.extend({
         switch(type){
             case 'bubble':
                 var chart = new BubbleChart();
-                chart.render(model.sortedTags);
+                chart.render(collect.model.sortedTags);
                 collect.doc.bind('/chart/bubble/click', function(e, tag){
                     workspace.navigate('tags/' + tag, true);
                 }); 

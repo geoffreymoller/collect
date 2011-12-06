@@ -1,13 +1,13 @@
 collect.utility = {
 
     time: function(id){
-        if(DEBUG.performance){
+        if(collect.DEBUG.performance){
             console.time(id);
         }
     },
 
     timeEnd: function(id){
-        if(DEBUG.performance){
+        if(collect.DEBUG.performance){
             console.timeEnd(id);
         }
     },
