@@ -8,7 +8,7 @@ script(id="topbar-template",type="template")
   div.topbar-inner
     div.container
       h3
-        a(href="#tags/") Collect 
+        a(href="#tags/all") Collect 
       ul.nav
         li
             a#visuals(href="#vis/bubble") Vis
@@ -53,7 +53,7 @@ script(id="links-template",type="template")
                 - linkHTML += '<div class="date"><%=collect.Model.formatDate(link.date)%></div><div>'
                 - linkHTML += '<a target="_blank" class="uri" href="<%=link.uri%>"><%=unescape(link.uri)%></a></div>'
                 - linkHTML += '<div class="tags"><%_.each(link.tags, function(tag){%><a href="/#tags/<%=tag%>"><%=tag%></a><%}); %></div></li> <% }); '
-                - linkHTML += ' if(relatedTags.length === 0) {%><img src="images/400px-Empty_set.png"></img><% }  %>'
+                - linkHTML += ' if(links.length === 0) {%><img src="images/400px-Empty_set.png"></img><% }  %>'
                 <ul>
                 | !{linkHTML}
                 </ul>

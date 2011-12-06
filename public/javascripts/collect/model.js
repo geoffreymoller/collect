@@ -135,7 +135,7 @@ collect.Model.prototype.relatedTags  = function(contextTags){
 collect.Model.prototype.contextLinks  = function(contextTags){
     //TODO - bind handlers, remove closure
     var model = this;
-    if(contextTags.length === 1 && contextTags[0] === ''){
+    if(contextTags.length === 1 && contextTags[0] === 'all'){
         return model.linkCollection.toJSON();
     }
     else{ 
