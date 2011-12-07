@@ -2,6 +2,8 @@ function BubbleChart(){ }
 
 BubbleChart.prototype.render = function(data){
 
+    collect.utility.time('TIME: BubbleChart::render');
+
     var r = 760,
         format = d3.format(",d"),
         fill = d3.scale.category20c();
@@ -40,6 +42,8 @@ BubbleChart.prototype.render = function(data){
         .attr("text-anchor", "middle")
         .attr("dy", ".3em")
         .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+    collect.utility.timeEnd('TIME: BubbleChart::render');
 
 }
 

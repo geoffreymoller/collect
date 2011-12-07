@@ -35,7 +35,6 @@ script(id="links-template",type="template")
             span#search
     div.center
         div#loader
-            img(src="images/loader.gif")
         nav
             div#adjacentTags
                 - var relatedTagHTML = '<ul><% _.each(relatedTags, function(tag) { %> <li class="<%=tag.type%>" id="tag-<%=tag.name%>">'
@@ -55,7 +54,7 @@ script(id="links-template",type="template")
                 - linkHTML += '<div class="date"><%=collect.Model.formatDate(link.date)%></div><div>'
                 - linkHTML += '<a target="_blank" class="uri" href="<%=link.uri%>"><%=unescape(link.uri)%></a></div>'
                 - linkHTML += '<div class="tags"><%_.each(link.tags, function(tag){%><a href="/#tags/<%=tag%>"><%=tag%></a><%}); %></div></li> <% }); '
-                - linkHTML += ' if(links.length === 0) {%><img src="images/400px-Empty_set.png"></img><% }  %>'
+                - linkHTML += ' if(links.length === 0) {%><div id="emptySet"></div><% }  %>'
                 <ul>
                 | !{linkHTML}
                 </ul>
