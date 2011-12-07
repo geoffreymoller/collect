@@ -42,6 +42,8 @@ collect.Application = Backbone.Router.extend({
 
     tag: function(contextTags, page) {
 
+        collect.utility.time('TIME: Route: tag');
+
         var model = collect.model;
         model.context.set({'context': contextTags});
 
@@ -99,9 +101,13 @@ collect.Application = Backbone.Router.extend({
             });
         }
 
+        collect.utility.timeEnd('TIME: Route: tag');
+
     },
 
     vis: function(type) {
+
+        collect.utility.time('TIME: Route: vis');
 
         var vis = new Backbone.LayoutManager({
             name: "#main-layout",
@@ -127,6 +133,8 @@ collect.Application = Backbone.Router.extend({
                 }); 
             return false;
         }
+
+        collect.utility.timeEnd('TIME: Route: vis');
     },
 
     listen: function(){
