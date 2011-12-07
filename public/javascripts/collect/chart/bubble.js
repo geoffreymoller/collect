@@ -21,7 +21,7 @@ BubbleChart.prototype.render = function(data){
 
     var node = vis.selectAll("g.node")
         .data(bubble.nodes(data)
-        .filter(function(d) { return !d.children; }))
+        .filter(function(d) { return !d.children && d.value >= 2; }))
         .enter().append("svg:g")
         .attr("class", "node")
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
