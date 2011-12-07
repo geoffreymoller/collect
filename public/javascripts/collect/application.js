@@ -40,6 +40,46 @@ collect.application = Backbone.Router.extend({
         this.navigate('tags/all', true);
     },
 
+    pagination: {
+        PAGE_LENGTH: 20,
+        pre: function(page){
+            var page = page ? page - 1 : 0;
+            var start, end;
+            start = page * this.PAGE_LENGTH;
+            if(page === 0){
+                end = 9;
+            }
+            else {
+                end = start + this.PAGE_LENGTH - 1;
+            }
+            return {
+                PAGE_LENGTH: this.PAGE_LENGTH,
+                start: start,
+                end: end
+            }
+        },
+        post: function(contextLinks, contextTags, page){
+
+            function pageSelectCallback(index, params){
+                var index = parseInt(index);
+                index++;
+                var predicate = contextTags.join(',') + '/' + index;
+                this.navigate('tags/' + predicate, true);
+                return false;
+            }
+
+            if(contextLinks.length > this.PAGE_LENGTH){
+                 $(".pagination").pagination(contextLinks.length, {
+                    callback: _.bind(pageSelectCallback, this),
+                    current_page: page, 
+                    num_display_entries: 20,
+                    num_edge_entries: 1,
+                    items_per_page: this.PAGE_LENGTH
+                });
+            }
+        }
+    },
+
     tag: function(contextTags, page) {
 
         collect.utility.time('TIME: Route: tag');
@@ -47,17 +87,7 @@ collect.application = Backbone.Router.extend({
         var model = collect.model;
         model.context.set({'context': contextTags});
 
-        var page = page ? page - 1 : 0;
-        var PAGE_LENGTH = 20;
-        var start, end;
-        start = page * PAGE_LENGTH;
-        if(page === 0){
-            end = 9;
-        }
-        else {
-            end = start + PAGE_LENGTH - 1;
-        }
-
+        var paginate = this.pagination.pre(page);
         var contextTags = contextTags.split('+');
         //TODO - memoize these:
         var relatedTags = model.relatedTags(contextTags);
@@ -70,7 +100,7 @@ collect.application = Backbone.Router.extend({
                 "#links": new this.views.LinksView({model: {
                     tags: model.sortedTags, 
                     relatedTags: relatedTags, 
-                    links: contextLinks.slice(start, end), 
+                    links: contextLinks.slice(paginate.start, paginate.end), 
                     contextTags: model.context.get('context') || 'all'}
                 })
             }
@@ -83,23 +113,7 @@ collect.application = Backbone.Router.extend({
             .addClass('tags')
         });  
 
-        function pageSelectCallback(index, params){
-            var index = parseInt(index);
-            index++;
-            var predicate = contextTags.join(',') + '/' + index;
-            this.navigate('tags/' + predicate, true);
-            return false;
-        }
-
-        if(contextLinks.length > PAGE_LENGTH){
-             $(".pagination").pagination(contextLinks.length, {
-                callback: _.bind(pageSelectCallback, this),
-                current_page: page, 
-                num_display_entries: 20,
-                num_edge_entries: 1,
-                items_per_page: PAGE_LENGTH
-            });
-        }
+        this.pagination.post(contextLinks, contextTags, page);
 
         collect.utility.timeEnd('TIME: Route: tag');
 

@@ -93,9 +93,6 @@ collect.Model.prototype.relatedTags  = function(contextTags){
         if(context && model.tagDict[context]){
             payload.push({name: context, type: 'active', count: model.tagDict[context].count});
         }
-        else {
-            return payload;
-        }
     });
 
     if(contextTags.length > 1){
