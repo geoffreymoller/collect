@@ -75,7 +75,7 @@ collect.Application = Backbone.Router.extend({
         });
 
         links.render(function(contents) {
-            $("body")
+            $("div#wrapper")
             .html(contents)
             .removeClass('vis')
             .addClass('tags')
@@ -112,7 +112,7 @@ collect.Application = Backbone.Router.extend({
         });
 
         vis.render(function(contents) {
-            $("body")
+            $("div#wrapper")
             .html(contents)
             .removeClass('tags')
             .addClass('vis')
@@ -123,7 +123,7 @@ collect.Application = Backbone.Router.extend({
                 var chart = new BubbleChart();
                 chart.render(collect.model.sortedTags);
                 collect.doc.bind('/chart/bubble/click', function(e, tag){
-                    workspace.navigate('tags/' + tag, true);
+                    collect.app.navigate('tags/' + tag, true);
                 }); 
             return false;
         }
