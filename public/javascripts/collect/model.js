@@ -7,11 +7,11 @@ collect.Model = function(data){
     this.linkCollection = new this.LinkCollection();
     this.Link = Backbone.Model.extend();
     this.Tag = Backbone.Model.extend();
-    this.data.rows.forEach(goog.bind(this.createDatum, this));
+    this.data.rows.forEach(goog.bind(this.createLink, this));
     this.sortTags();
 }
 
-collect.Model.prototype.createDatum = function(datum, index, array){
+collect.Model.prototype.createLink = function(datum, index, array){
 
     var link = new this.Link({
         couchId: datum.id,
@@ -88,10 +88,14 @@ collect.Model.prototype.sortTags = function(){
 collect.Model.prototype.relatedTags  = function(contextTags){
     //TODO - bind handlers, remove closure
     var model = this;
-    var payload = [];
+    var payload = {
+        list: [],
+        map: {}
+    };
     contextTags.forEach(function(context){
         if(context && model.tagDict[context]){
-            payload.push({name: context, type: 'active', count: model.tagDict[context].count});
+            payload.list.push({name: context, type: 'active', count: model.tagDict[context].count});
+            payload.map[context] = { type: 'active' };
         }
     });
 
@@ -110,7 +114,8 @@ collect.Model.prototype.relatedTags  = function(contextTags){
         });
         if(intersection){
             intersection.forEach(function(adjacentNode){
-                payload.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                payload.map[adjacentNode] = { type: 'adjacent' };
             });
         }
     }
@@ -120,7 +125,8 @@ collect.Model.prototype.relatedTags  = function(contextTags){
             if(contextTag){
                 var adjacent = contextTag.adjacent;
                 adjacent.forEach(function(adjacentNode){
-                    payload.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                    payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                    payload.map[adjacentNode] = { type: 'adjacent' };
                 });
             }
         });
