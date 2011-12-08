@@ -42,10 +42,10 @@ script(id="links-template",type="template")
                 - relatedTagHTML +=  '<span class="add">+</span><span class="subtract">-</span></li> <% }); %></ul>'
                 | !{relatedTagHTML}
             div#tags
-                - var tagHTML = '<% _.each(tags, function(tag) { var className = ""; %>'
-                - tagHTML += ' <% if(relatedTags.map[tag.name]) { className = relatedTags.map[tag.name].type } %>'
-                - tagHTML += '<li id="tag-<%=tag.name%>" class="<%=className%>"><a href="/#tags/<%=tag.name%>"><%=tag.name%></a>'
-                - tagHTML += '<span class="count"><%=tag.value%></span><span class="add">+</span><span class="subtract">-</span></li> <% }); %>'
+                - var tagHTML = '<% _.each(tags, function(tag) { %>'
+                - tagHTML += ' <% if(!!!relatedTags.map[tag.name]) { %>'
+                - tagHTML += '<li id="tag-<%=tag.name%>"><a href="/#tags/<%=tag.name%>"><%=tag.name%></a>'
+                - tagHTML += '<span class="count"><%=tag.value%></span><span class="add">+</span><span class="subtract">-</span></li> <%} }); %>'
                 <ul>
                 | !{tagHTML}
                 </ul>
