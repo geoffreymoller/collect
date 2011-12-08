@@ -46,13 +46,12 @@ collect.application = Backbone.Router.extend({
 
         var model = collect.model;
         model.context.set({'context': contextTags});
-
         var contextTags = contextTags.split('+');
         //TODO - memoize these:
         var relatedTags = model.relatedTags(contextTags);
         var contextLinks = model.contextLinks(contextTags); 
 
-        var paginate = this.pagination.main(page);
+        var pagination = new collect.pagination(page);
         var links = new Backbone.LayoutManager({
             name: "#main-layout",
             views: {
@@ -60,7 +59,7 @@ collect.application = Backbone.Router.extend({
                 "#links": new this.views.LinksView({model: {
                     tags: model.sortedTags, 
                     relatedTags: relatedTags, 
-                    links: contextLinks.slice(paginate.start, paginate.end), 
+                    links: contextLinks.slice(pagination.start, pagination.end), 
                     contextTags: model.context.get('context') || 'all'}
                 })
             }
@@ -73,7 +72,7 @@ collect.application = Backbone.Router.extend({
             .addClass('tags')
         });  
 
-        paginate.callback(this, contextLinks, contextTags);
+        pagination.paint(this, contextLinks, contextTags);
         collect.utility.timeEnd('TIME: Route: tag');
 
     },
@@ -108,48 +107,6 @@ collect.application = Backbone.Router.extend({
         }
 
         collect.utility.timeEnd('TIME: Route: vis');
-    },
-
-    pagination: {
-        PAGE_LENGTH: 20,
-        main: function(page){
-            this.page = page ? page - 1 : 0;
-            var start, end;
-            start = page * this.PAGE_LENGTH;
-            if(this.page === 0){
-                end = 9;
-            }
-            else {
-                end = start + this.PAGE_LENGTH - 1;
-            }
-            return {
-                callback: this.callback,
-                PAGE_LENGTH: this.PAGE_LENGTH,
-                page: this.page,
-                start: start,
-                end: end
-            }
-        },
-        callback: function(app, contextLinks, contextTags){
-            function pageSelectCallback(index, params){
-                console.log('pageSelectCallback');
-                var index = parseInt(index);
-                index++;
-                var predicate = contextTags.join(',') + '/' + index;
-                app.navigate('tags/' + predicate, true);
-                return false;
-            }
-            console.log(contextLinks.length, this.PAGE_LENGTH);
-            if(contextLinks.length > this.PAGE_LENGTH){
-                 $(".pagination").pagination(contextLinks.length, {
-                    callback: _.bind(pageSelectCallback, this),
-                    current_page: this.page, 
-                    num_display_entries: 20,
-                    num_edge_entries: 1,
-                    items_per_page: this.PAGE_LENGTH 
-                });
-            }
-        }
     },
 
     listen: function(){
