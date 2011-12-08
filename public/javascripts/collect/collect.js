@@ -8,7 +8,7 @@ $(document).ready(function(){
     }
     else {
         var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-        collect.links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?callback=?');
+        collect.links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
     }
 
     collect.doc = $(document);//root reference for event bind/trigger
