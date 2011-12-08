@@ -46,23 +46,12 @@ collect.Application = Backbone.Router.extend({
 
         var model = collect.model;
         model.context.set({'context': contextTags});
-
-        var page = page ? page - 1 : 0;
-        var PAGE_LENGTH = 20;
-        var start, end;
-        start = page * PAGE_LENGTH;
-        if(page === 0){
-            end = 9;
-        }
-        else {
-            end = start + PAGE_LENGTH - 1;
-        }
-
         var contextTags = contextTags.split('+');
         //TODO - memoize these:
         var relatedTags = model.relatedTags(contextTags);
         var contextLinks = model.contextLinks(contextTags); 
 
+        var pagination = new collect.pagination(page);
         var links = new Backbone.LayoutManager({
             name: "#main-layout",
             views: {
@@ -70,7 +59,7 @@ collect.Application = Backbone.Router.extend({
                 "#links": new this.views.LinksView({model: {
                     tags: model.sortedTags, 
                     relatedTags: relatedTags, 
-                    links: contextLinks.slice(start, end), 
+                    links: contextLinks.slice(pagination.start, pagination.end), 
                     contextTags: model.context.get('context') || 'all'}
                 })
             }
@@ -83,23 +72,14 @@ collect.Application = Backbone.Router.extend({
             .addClass('tags')
         });  
 
-        function pageSelectCallback(index, params){
+        pagination.paint(contextLinks.length, _.bind(function(index) {
             var index = parseInt(index);
             index++;
             var predicate = contextTags.join(',') + '/' + index;
             this.navigate('tags/' + predicate, true);
-            return false;
-        }
+        }, this));
 
-        if(contextLinks.length > PAGE_LENGTH){
-             $(".pagination").pagination(contextLinks.length, {
-                callback: _.bind(pageSelectCallback, this),
-                current_page: page, 
-                num_display_entries: 20,
-                num_edge_entries: 1,
-                items_per_page: PAGE_LENGTH
-            });
-        }
+        collect.utility.timeEnd('TIME: Route: tag');
 
         collect.utility.timeEnd('TIME: Route: tag');
 

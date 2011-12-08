@@ -37,13 +37,15 @@ script(id="links-template",type="template")
         div#loader
         nav
             div#adjacentTags
-                - var relatedTagHTML = '<ul><% _.each(relatedTags, function(tag) { %> <li class="<%=tag.type%>" id="tag-<%=tag.name%>">'
+                - var relatedTagHTML = '<ul><% _.each(relatedTags.list, function(tag) { %> <li class="<%=tag.type%>" id="tag-<%=tag.name%>">'
                 - relatedTagHTML +=  '<a href="/#tags/<%=tag.name%>"><%=tag.name%></a><span class="count"><%=tag.count%></span>'
                 - relatedTagHTML +=  '<span class="add">+</span><span class="subtract">-</span></li> <% }); %></ul>'
                 | !{relatedTagHTML}
             div#tags
-                - var tagHTML = '<% _.each(tags, function(tag) { %> <li id="tag-<%=tag.name%>"><a href="/#tags/<%=tag.name%>"><%=tag.name%></a>'
-                - tagHTML += '<span class="count"><%=tag.value%></span><span class="add">+</span><span class="subtract">-</span></li> <% }); %>'
+                - var tagHTML = '<% _.each(tags, function(tag) { %>'
+                - tagHTML += ' <% if(!!!relatedTags.map[tag.name]) { %>'
+                - tagHTML += '<li id="tag-<%=tag.name%>"><a href="/#tags/<%=tag.name%>"><%=tag.name%></a>'
+                - tagHTML += '<span class="count"><%=tag.value%></span><span class="add">+</span><span class="subtract">-</span></li> <%} }); %>'
                 <ul>
                 | !{tagHTML}
                 </ul>
