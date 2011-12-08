@@ -2,16 +2,15 @@ collect.pagination = function(page){
 
     this.PAGE_LENGTH = 20;
 
-    this.paint = function(app, collection, contextTags){
+    this.paint = function(collectionLength, callback){
+
         function pageSelectCallback(index){
-            var index = parseInt(index);
-            index++;
-            var predicate = contextTags.join(',') + '/' + index;
-            app.navigate('tags/' + predicate, true);
+            callback(index);
             return false;
         }
-        if(collection.length > this.PAGE_LENGTH){
-             $(".pagination").pagination(collection.length, {
+
+        if(collectionLength> this.PAGE_LENGTH){
+             $(".pagination").pagination(collectionLength, {
                 callback: _.bind(pageSelectCallback, this),
                 current_page: this.page, 
                 num_display_entries: 20,
@@ -19,6 +18,7 @@ collect.pagination = function(page){
                 items_per_page: this.PAGE_LENGTH 
             });
         }
+
     }
 
     this.page = page ? page - 1 : 0;

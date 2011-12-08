@@ -72,7 +72,13 @@ collect.application = Backbone.Router.extend({
             .addClass('tags')
         });  
 
-        pagination.paint(this, contextLinks, contextTags);
+        pagination.paint(contextLinks.length, _.bind(function(index) {
+            var index = parseInt(index);
+            index++;
+            var predicate = contextTags.join(',') + '/' + index;
+            this.navigate('tags/' + predicate, true);
+        }, this));
+
         collect.utility.timeEnd('TIME: Route: tag');
 
     },
