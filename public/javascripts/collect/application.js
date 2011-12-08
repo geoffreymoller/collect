@@ -81,8 +81,6 @@ collect.Application = Backbone.Router.extend({
 
         collect.utility.timeEnd('TIME: Route: tag');
 
-        collect.utility.timeEnd('TIME: Route: tag');
-
     },
 
     vis: function(type) {

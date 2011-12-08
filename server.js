@@ -80,7 +80,7 @@ app.put('/update', function(req, res){
 
     var id = req.query.id;
     var callback = getCallback('Link Updated!', res);
-    db.merge(id, {"tags": tags}, callback);
+    db.merge(id, {"tags": tags, "date_modified": new Date().getTime()}, callback);
 })
 
 app.get('/getURIByKey', function(req, res){
