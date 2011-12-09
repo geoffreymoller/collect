@@ -1,14 +1,28 @@
-collect.Model = function(data){
-    this.data = data;
-    this.tagDict = {};
-    this.Context = Backbone.Model.extend();
-    this.context = new this.Context();
-    this.LinkCollection = Backbone.Collection.extend();
-    this.linkCollection = new this.LinkCollection();
-    this.Link = Backbone.Model.extend();
-    this.Tag = Backbone.Model.extend();
-    this.data.rows.forEach(goog.bind(this.createLink, this));
-    this.sortTags();
+collect.Model = function(callback){
+
+    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
+    var links;
+    if(localStorage['lastUpdated']){
+
+    }
+    else {
+        links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
+    }
+
+    links.success(goog.bind(function(data){
+        this.data = data;
+        this.tagDict = {};
+        this.Context = Backbone.Model.extend();
+        this.context = new this.Context();
+        this.LinkCollection = Backbone.Collection.extend();
+        this.linkCollection = new this.LinkCollection();
+        this.Link = Backbone.Model.extend();
+        this.Tag = Backbone.Model.extend();
+        this.data.rows.forEach(goog.bind(this.createLink, this));
+        this.sortTags();
+        callback();
+    }, this));
+
 }
 
 collect.Model.prototype.createLink = function(datum, index, array){
