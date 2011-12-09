@@ -3,26 +3,26 @@ html
   head
     link(href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700', rel='stylesheet',type='text/css')
     title= title
-    link(rel="stylesheet", href="/stylesheets/bootstrap.min.css")
-    link(rel='stylesheet', href='/stylesheets/pagination.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    - if(env === 'prod')
+      link(rel="stylesheet", href="/stylesheets/collect.css?h=#{static.cssHash}")
+    - else
+      - each file in static.cssFiles
+        link(rel="stylesheet", href="/stylesheets/#{file}")
+
   body!= body
-  script(src='javascripts/libs.js')
+
   script
     collect = {};
+
+  - if(env === 'prod')
+    script(src='javascripts/collect.js?h=#{static.javascriptHash}')
+  - else
+    - each file in static.javascriptFiles
+      script(src='javascripts/#{file}')
+
+  script
     collect.links = $.getJSON('https://sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
-  script(src='javascripts/backbone.layoutmanager.js')
-
-  script(src='javascripts/d3/d3.js')
-  script(src='javascripts/d3/d3.layout.js')
-
-  script(src='javascripts/collect/chart/bubble.js')
-
-  script(src='javascripts/collect/collect.js')
-  script(src='javascripts/collect/pagination.js')
-  script(src='javascripts/collect/utility.js')
-  script(src='javascripts/collect/application.js')
-  script(src='javascripts/collect/model.js')
 
   script
       var _gaq = _gaq || [];
