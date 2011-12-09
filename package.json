@@ -9,5 +9,6 @@
     , "jade": ">= 0.0.1"
     , "node-uuid": ">= 1.2.0"
     , "cradle": ">= 0.5.7"
+    , "connect-assetmanager": ">= 0.0.24"
   }
 }

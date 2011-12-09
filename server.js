@@ -8,6 +8,7 @@ var
   gzip = require('connect-gzip'),
   sys = require('util'),
   cradle = require('cradle'),
+  assetManager = require('connect-assetmanager'),
   connection = new(cradle.Connection)('https://geoffreymoller.cloudant.com', 443, {
       auth: { username: process.env.DB_API_KEY, password: process.env.DB_API_SECRET }
   });
@@ -20,6 +21,44 @@ var app = module.exports = express.createServer(
 var port = 80;
 
 // Configuration
+var cssFiles = [
+    'bootstrap.min.css'
+    , 'pagination.css'
+    , 'style.css'
+]
+
+var javascriptFiles = [
+    'collect-closure-compiled.js'
+    , 'jquery-1.7.min.js'
+    , 'jquery.pagination.js'
+    , 'underscore-min.js'
+    , 'backbone-min.js'
+    , 'backbone.layoutmanager.js'
+    , 'd3/d3.js'
+    , 'd3/d3.layout.js'
+    , 'collect/collect.js'
+    , 'collect/pagination.js'
+    , 'collect/chart/bubble.js'
+    , 'collect/utility.js'
+    , 'collect/application.js'
+    , 'collect/model.js'
+]
+
+var assetManagerGroups = {
+    'js': {
+        'route': /\/javascripts\/collect.js/
+        , 'path': './public/javascripts/'
+        , 'dataType': 'javascript'
+        , 'files': javascriptFiles
+    },
+    'css': {
+        'route': /\/stylesheets\/collect.css/
+        , 'path': './public/stylesheets/'
+        , 'dataType': 'css'
+        , 'files': cssFiles
+    }
+};
+var assetsManagerMiddleware = assetManager(assetManagerGroups);
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -27,27 +66,36 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+  app.use(assetsManagerMiddleware);
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
 
+var env;
 app.configure('development', function(){
+  env = 'dev';
   port = 3000;
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 app.configure('production', function(){
+  env = 'prod';
   app.use(express.errorHandler()); 
 });
 
 // Routes
 app.get('/', function(req, res){
-
     res.render('index', {
       title: 'Collect',
-      serverTime: (new Date()).getTime()
+      serverTime: (new Date()).getTime(),
+      env: env,
+      static: {
+          javascriptFiles: javascriptFiles,
+          javascriptHash: assetsManagerMiddleware.cacheHashes['js'],
+          cssFiles: cssFiles,
+          cssHash: assetsManagerMiddleware.cacheHashes['css']
+      }
     });
-
 });
 
 //TODO - keep this? currently going straight to DB
