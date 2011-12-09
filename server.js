@@ -73,7 +73,7 @@ app.configure(function(){
 
 var env;
 app.configure('development', function(){
-  env = 'env';
+  env = 'dev';
   port = 3000;
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
