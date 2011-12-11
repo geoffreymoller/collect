@@ -1,3 +1,5 @@
+"use strict";
+
 collect.DEBUG =  {
     performance: true
 }

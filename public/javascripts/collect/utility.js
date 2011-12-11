@@ -1,3 +1,5 @@
+"use strict";
+
 collect.utility = {
 
     time: function(id){

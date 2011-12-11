@@ -1,3 +1,5 @@
+"use strict";
+
 collect.Model = function(callback){
 
     var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';

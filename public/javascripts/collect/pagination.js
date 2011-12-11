@@ -1,3 +1,5 @@
+"use strict";
+
 collect.pagination = function(page){
 
     this.PAGE_LENGTH = 20;

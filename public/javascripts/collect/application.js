@@ -1,3 +1,5 @@
+"use strict";
+
 collect.Application = Backbone.Router.extend({
 
     initialize: function(){

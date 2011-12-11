@@ -1,3 +1,5 @@
+"use strict";
+
 function BubbleChart(){ }
 
 BubbleChart.prototype.render = function(data){
