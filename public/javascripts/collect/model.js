@@ -2,17 +2,7 @@
 
 collect.Model = function(callback){
 
-    var db = new collect.db();
-
-    var links;
-    if(db.updated){
-        links = db.getLinks(null, db.updated); 
-    }
-    else {
-        links = db.getLinks(null); 
-    }
-
-    links.success(goog.bind(function(data){
+    var callback = _.bind(function(data){
         this.data = data;
         this.tagDict = {};
         this.Context = Backbone.Model.extend();
@@ -23,8 +13,11 @@ collect.Model = function(callback){
         this.Tag = Backbone.Model.extend();
         this.data.rows.forEach(goog.bind(this.createLink, this));
         this.sortTags();
-        callback();
-    }, this));
+        collect.doc.trigger('/model/load');
+    }, this);
+
+    var db = new collect.db();
+    var links = db.getLinks(callback);
 
 }
 

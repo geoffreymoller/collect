@@ -16,13 +16,17 @@ collect.db.prototype.getLinks = function(callback, optLastUpdated){
     var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
     var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
     var links;
-    if(optLastUpdated){
-        links = $.getJSON(path + 'uriModified?descending=true&endkey="1323647116858"&callback=?')
+    if(this.updated){
+        links = $.getJSON(path + 'uriModified?descending=true&endkey="' + this.updated + '"&callback=?')
+        //TODO - update DB 
     }
     else{
         links = $.getJSON(path + 'uri?descending=true&callback=?');
+        //TODO - populate DB
     }
 
-    return links;
+    links.success(function(data){
+        callback(data);
+    });
 
 }
