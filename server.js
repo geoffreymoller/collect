@@ -42,6 +42,7 @@ var javascriptFiles = [
     , 'collect/utility.js'
     , 'collect/application.js'
     , 'collect/model.js'
+    , 'collect/db.js'
 ]
 
 var assetManagerGroups = {

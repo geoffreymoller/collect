@@ -2,13 +2,14 @@
 
 collect.Model = function(callback){
 
-    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-    var links;
-    if(localStorage['lastUpdated']){
+    var db = new collect.db();
 
+    var links;
+    if(db.updated){
+        links = db.getLinks(null, db.updated); 
     }
     else {
-        links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
+        links = db.getLinks(null); 
     }
 
     links.success(goog.bind(function(data){
