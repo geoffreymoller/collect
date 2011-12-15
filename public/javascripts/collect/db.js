@@ -8,7 +8,7 @@ if ('webkitIndexedDB' in window) {
 }
 
 //TODO - module to worker
-collect.db = function(){
+collect.db = function(modelCallback){
 
   this.__defineGetter__('lastUpdated', function() {
     return localStorage['lastUpdated'];
@@ -18,34 +18,45 @@ collect.db = function(){
     localStorage['lastUpdated'] = prop;
   });
 
+  this.modelCallback = modelCallback;
+  this.getLinks();
+
 }
 
-collect.db.prototype.getLinks = function(callback){
+collect.db.prototype.getLinks = function(){
 
-    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-    var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
-    var links;
+    collect.doc.bind('/db/links/add/done /db/links/nonew', _.bind(function(){
+        this.getAllLinks(function(links){
+            console.dir(links);
+        });
+    }, this)) 
 
     this.open();
 
+    var path = this.getPath();
+    var links;
+    links = $.getJSON(path);
+    links.success(_.bind(function(data){
+        if(data.rows.length){
+            this.addLinks(data);
+        }
+        else {
+            collect.doc.trigger('/db/links/nonew');
+        }
+    }, this));
+
+}
+
+collect.db.prototype.getPath = function(){
+    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
+    var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
     if(this.lastUpdated){
         path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
     }
     else{
         path += 'uri?descending=true&callback=?';
     }
-        
-    collect.doc.bind('/db/links/all/add', _.bind(function(){
-        this.getAllLinks(function(links){
-            console.dir(links);
-        });
-    }, this)) 
-
-    links = $.getJSON(path);
-    links.success(_.bind(function(data){
-        this.addLinks(data);
-    }, this));
-
+    return path;
 }
 
 collect.db.prototype.onerror = function(e) {
@@ -91,7 +102,7 @@ collect.db.prototype.addLinks = function(data) {
     trans.oncomplete = function(){
       collect.utility.timeEnd('DB::addLinks');
       that.lastUpdated = collect.server.time;
-      collect.doc.trigger('/db/links/all/add');
+      collect.doc.trigger('/db/links/add/done');
     }
 
     collect.utility.time('DB::addLinks');

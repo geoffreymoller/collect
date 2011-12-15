@@ -16,8 +16,7 @@ collect.Model = function(callback){
         collect.doc.trigger('/model/load');
     }, this);
 
-    var db = new collect.db();
-    db.getLinks(callback);
+    var db = new collect.db(callback);
 
 }
 
