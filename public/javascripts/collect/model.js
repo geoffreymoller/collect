@@ -3,13 +3,7 @@
 collect.Model = function(callback){
 
     var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-    var links;
-    if(localStorage['lastUpdated']){
-
-    }
-    else {
-        links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
-    }
+    var links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
 
     links.success(goog.bind(function(data){
         this.data = data;
@@ -29,9 +23,11 @@ collect.Model = function(callback){
 
 collect.Model.prototype.createLink = function(datum, index, array){
 
+    console.log(datum);
+
     var link = new this.Link({
         couchId: datum.id,
-        date: datum.value.date,
+        date: datum.value.date_created,
         uri: datum.value.uri,
         title: datum.value.title,
         tags: datum.value.tags
