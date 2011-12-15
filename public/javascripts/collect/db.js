@@ -10,17 +10,17 @@ if ('webkitIndexedDB' in window) {
 //TODO - module to worker
 collect.db = function(){
 
-  this.__defineGetter__('updated', function() {
+  this.__defineGetter__('lastUpdated', function() {
     return localStorage['lastUpdated'];
   });
 
-  this.__defineSetter__('updated', function(prop) {
+  this.__defineSetter__('lastUpdated', function(prop) {
     localStorage['lastUpdated'] = prop;
   });
 
 }
 
-collect.db.prototype.getLinks = function(callback, optLastUpdated){
+collect.db.prototype.getLinks = function(callback){
 
     var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
     var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
@@ -28,13 +28,20 @@ collect.db.prototype.getLinks = function(callback, optLastUpdated){
 
     this.open();
 
-    if(this.updated){
-        links = $.getJSON(path + 'uriModified?descending=true&endkey="' + this.updated + '"&callback=?')
+    if(this.lastUpdated){
+        path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
     }
     else{
-        links = $.getJSON(path + 'uri?descending=true&callback=?');
+        path += 'uri?descending=true&callback=?';
     }
+        
+    collect.doc.bind('/db/links/all/add', _.bind(function(){
+        this.getAllLinks(function(links){
+            console.dir(links);
+        });
+    }, this)) 
 
+    links = $.getJSON(path);
     links.success(_.bind(function(data){
         this.addLinks(data);
     }, this));
@@ -79,8 +86,8 @@ collect.db.prototype.addLinks = function(data) {
     var store = trans.objectStore("link");
     trans.oncomplete = function(){
       collect.utility.timeEnd('DB::addLinks');
-      that.updated = collect.server.time;
-      that.getAllLinks();
+      that.lastUpdated = collect.server.time;
+      collect.doc.trigger('/db/links/all/add');
     }
 
     collect.utility.time('DB::addLinks');
@@ -99,7 +106,7 @@ collect.db.prototype.addLink = function(store, link, callback) {
     "URI": link.value.uri,
     "tags": link.value.tags,
     "dateCreated": link.value.date,
-    "dateModified": link.value.date,
+    "dateModified": link.value.date_modified,
     "timeStamp": new Date().getTime()
   };
 
@@ -126,16 +133,17 @@ collect.db.prototype.deleteLink = function(id) {
 
 };
 
-collect.db.prototype.getAllLinks = function() {
+collect.db.prototype.getAllLinks = function(callback) {
 
   var that = this;
   var db = this.db;
-  var payload = [];
+  var links = [];
   collect.utility.time('DB::getAllLinks');
+
   var trans = db.transaction(["link"], IDBTransaction.READ_WRITE);
   trans.oncomplete = function(){
+    callback(links);
     collect.utility.timeEnd('DB::getAllLinks');
-    console.dir(payload);
   }
   var store = trans.objectStore("link");
 
@@ -146,7 +154,7 @@ collect.db.prototype.getAllLinks = function() {
     var result = e.target.result;
     if(!!result == false)
       return;
-    payload.push(result.value);
+    links.push(result.value);
     result.continue();
   };
 

@@ -17,7 +17,7 @@ collect.Model = function(callback){
     }, this);
 
     var db = new collect.db();
-    var links = db.getLinks(callback);
+    db.getLinks(callback);
 
 }
 
