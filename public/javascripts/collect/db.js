@@ -80,7 +80,7 @@ collect.db.prototype.open = function() {
         if(db.objectStoreNames.contains("link")) {
           db.deleteObjectStore("link");
         }
-        var store = db.createObjectStore("link", {keyPath: "URI"});
+        var store = db.createObjectStore("link", {keyPath: "uri"});
         store.createIndex("title", "title", { unique: false }); 
         store.createIndex("tags", "tags", { unique: false }); 
         store.createIndex("dateCreated", "dateCreated", { unique: false }); 
@@ -117,12 +117,12 @@ collect.db.prototype.addLink = function(store, link, callback) {
 
   var that = this;
   var data = {
+    "couchId": link.id,
     "title": link.value.title,
-    "URI": link.value.uri,
-    "tags": link.value.tags ? link.value.tags.sort() : "" ,
-    "dateCreated": link.value.date,
-    "dateModified": link.value.date_modified,
-    "timeStamp": new Date().getTime()
+    "uri": link.value.uri,
+    "tags": link.value.tags ? link.value.tags.sort() : [] ,
+    "dateCreated": link.value.date_created,
+    "dateModified": link.value.date_modified
   };
 
   var request = store.put(data);
