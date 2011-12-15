@@ -23,8 +23,6 @@ collect.Model = function(callback){
 
 collect.Model.prototype.createLink = function(datum, index, array){
 
-    console.log(datum);
-
     var link = new this.Link({
         couchId: datum.id,
         date: datum.value.date_created,
