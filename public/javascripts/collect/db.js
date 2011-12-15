@@ -26,9 +26,9 @@ collect.db = function(modelCallback){
 collect.db.prototype.getLinks = function(){
 
     collect.doc.bind('/db/links/add/done /db/links/nonew', _.bind(function(){
-        this.getAllLinks(function(links){
-            console.dir(links);
-        });
+        this.getAllLinks(_.bind(function(links){
+            this.modelCallback(links);
+        }, this));
     }, this)) 
 
     this.open();

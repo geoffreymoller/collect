@@ -9,9 +9,12 @@ collect.Model = function(callback){
         this.context = new this.Context();
         this.LinkCollection = Backbone.Collection.extend();
         this.linkCollection = new this.LinkCollection();
+        this.linkCollection.comparator = function(link){
+            return -link.get('dateCreated'); //TODO - sort at IDB?
+        };
         this.Link = Backbone.Model.extend();
         this.Tag = Backbone.Model.extend();
-        this.data.rows.forEach(goog.bind(this.createLink, this));
+        this.data.forEach(goog.bind(this.createLink, this));
         this.sortTags();
         collect.doc.trigger('/model/load');
     }, this);
@@ -23,17 +26,17 @@ collect.Model = function(callback){
 collect.Model.prototype.createLink = function(datum, index, array){
 
     var link = new this.Link({
-        couchId: datum.id,
-        date: datum.value.date,
-        uri: datum.value.uri,
-        title: datum.value.title,
-        tags: datum.value.tags
+        couchId: datum.couchId,
+        dateCreated: datum.dateCreated,
+        uri: datum.uri,
+        title: datum.title,
+        tags: datum.tags
     });
 
     this.linkCollection.add(link);
 
-    if(datum.value.tags){
-        this.createTagStructures(datum.value.tags, index);
+    if(datum.tags){
+        this.createTagStructures(datum.tags, index);
     }
 
 }
