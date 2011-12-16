@@ -9,9 +9,6 @@ collect.Model = function(callback){
         this.context = new this.Context();
         this.LinkCollection = Backbone.Collection.extend();
         this.linkCollection = new this.LinkCollection();
-        this.linkCollection.comparator = function(link){
-            return -link.get('dateCreated'); //TODO - sort at IDB?
-        };
         this.Link = Backbone.Model.extend();
         this.Tag = Backbone.Model.extend();
         this.data.forEach(goog.bind(this.createLink, this));

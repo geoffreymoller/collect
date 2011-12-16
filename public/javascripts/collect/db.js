@@ -81,10 +81,7 @@ collect.db.prototype.open = function() {
           db.deleteObjectStore("link");
         }
         var store = db.createObjectStore("link", {keyPath: "uri"});
-        store.createIndex("title", "title", { unique: false }); 
-        store.createIndex("tags", "tags", { unique: false }); 
-        store.createIndex("dateCreated", "dateCreated", { unique: false }); 
-        store.createIndex("dateModified", "dateModified", { unique: false }); 
+        store.createIndex("dateCreatedDesc", "dateCreatedDesc", { unique: false }); 
       };
     }
   };
@@ -122,6 +119,8 @@ collect.db.prototype.addLink = function(store, link, callback) {
     "uri": link.value.uri,
     "tags": link.value.tags ? link.value.tags.sort() : [] ,
     "dateCreated": link.value.date_created,
+    //TODO - replace dateCreatedDesc with keyrange / descending query
+    "dateCreatedDesc": 10000000000000000 - link.value.date_created,
     "dateModified": link.value.date_modified
   };
 
@@ -163,7 +162,7 @@ collect.db.prototype.getAllLinks = function(callback) {
   var store = trans.objectStore("link");
 
   var keyRange = IDBKeyRange.lowerBound(0);
-  var cursorRequest = store.openCursor(keyRange);
+  var cursorRequest = store.index('dateCreatedDesc').openCursor(keyRange);
 
   cursorRequest.onsuccess = function(e) {
     var result = e.target.result;
