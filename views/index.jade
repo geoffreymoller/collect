@@ -53,7 +53,7 @@ script(id="links-template",type="template")
             div.pagination
             div.links
                 - var linkHTML = '<% _.each(links, function(link) { %> <li><a target="_blank" class="title" href="<%=link.uri%>"><%=unescape(link.title)%></a>'
-                - linkHTML += '<div class="date"><%=collect.Model.formatDate(link.date)%></div><div>'
+                - linkHTML += '<div class="date"><%=collect.Model.formatDate(link.dateCreated)%></div><div>'
                 - linkHTML += '<a target="_blank" class="uri" href="<%=link.uri%>"><%=unescape(link.uri)%></a></div>'
                 - linkHTML += '<div class="tags"><%_.each(link.tags, function(tag){%><a href="/#tags/<%=tag%>"><%=tag%></a><%}); %></div></li> <% }); '
                 - linkHTML += ' if(links.length === 0) {%><div id="emptySet"></div><% }  %>'

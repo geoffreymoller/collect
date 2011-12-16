@@ -12,16 +12,14 @@ html
 
   body!= body
 
-  script
-      collect = {
-          server: { time: #{serverTime} }
-      }
-
   - if(env === 'prod')
     script(src='javascripts/collect.js?h=#{static.javascriptHash}')
   - else
     - each file in static.javascriptFiles
       script(src='javascripts/#{file}')
+
+  script
+      collect.server = { time: #{serverTime} }
 
   script
       var _gaq = _gaq || [];

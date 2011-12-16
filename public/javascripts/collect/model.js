@@ -2,10 +2,7 @@
 
 collect.Model = function(callback){
 
-    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-    var links = $.getJSON('https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/uri?descending=true&callback=?');
-
-    links.success(goog.bind(function(data){
+    var callback = _.bind(function(data){
         this.data = data;
         this.tagDict = {};
         this.Context = Backbone.Model.extend();
@@ -14,27 +11,29 @@ collect.Model = function(callback){
         this.linkCollection = new this.LinkCollection();
         this.Link = Backbone.Model.extend();
         this.Tag = Backbone.Model.extend();
-        this.data.rows.forEach(goog.bind(this.createLink, this));
+        this.data.forEach(goog.bind(this.createLink, this));
         this.sortTags();
-        callback();
-    }, this));
+        collect.doc.trigger('/model/load');
+    }, this);
+
+    var db = new collect.db(callback);
 
 }
 
 collect.Model.prototype.createLink = function(datum, index, array){
 
     var link = new this.Link({
-        couchId: datum.id,
-        date: datum.value.date_created,
-        uri: datum.value.uri,
-        title: datum.value.title,
-        tags: datum.value.tags
+        couchId: datum.couchId,
+        dateCreated: datum.dateCreated,
+        uri: datum.uri,
+        title: datum.title,
+        tags: datum.tags
     });
 
     this.linkCollection.add(link);
 
-    if(datum.value.tags){
-        this.createTagStructures(datum.value.tags, index);
+    if(datum.tags){
+        this.createTagStructures(datum.tags, index);
     }
 
 }
