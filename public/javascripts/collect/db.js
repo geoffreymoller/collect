@@ -1,4 +1,4 @@
-"use strict";
+;"use strict";
 
 var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
 

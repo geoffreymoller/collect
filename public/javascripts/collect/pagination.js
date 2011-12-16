@@ -1,4 +1,4 @@
-"use strict";
+;"use strict";
 
 collect.pagination = function(page){
 
