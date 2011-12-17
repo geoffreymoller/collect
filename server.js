@@ -32,6 +32,7 @@ var javascriptFiles = [
     , 'jquery-1.7.min.js'
     , 'jquery.pagination.js'
     , 'underscore-min.js'
+    , 'handlebars-1.0.0.beta.4.js'
     , 'backbone-min.js'
     , 'backbone.layoutmanager.js'
     , 'd3/d3.js'
