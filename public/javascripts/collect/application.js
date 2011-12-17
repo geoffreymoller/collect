@@ -4,6 +4,15 @@ collect.Application = Backbone.Router.extend({
 
     initialize: function(){
         this.listen();
+        Handlebars.registerHelper('date_string', function(milliseconds) {
+          return collect.Model.formatDate(milliseconds);
+        });
+        Backbone.LayoutManager.configure({
+          render: function(template, context) {
+            var result = Handlebars.compile(template)(context);
+            return result; 
+          }
+        });
     },
 
     routes: {
@@ -59,7 +68,9 @@ collect.Application = Backbone.Router.extend({
             views: {
                 ".topbar": new this.views.TopbarView(),
                 "#links": new this.views.LinksView({model: {
-                    tags: model.sortedTags, 
+                    tags: model.sortedTags.filter(function(tag){
+                        return !!!relatedTags.map[tag.name];
+                    }), 
                     relatedTags: relatedTags, 
                     links: contextLinks.slice(pagination.start, pagination.end), 
                     contextTags: model.context.get('context') || 'all'}

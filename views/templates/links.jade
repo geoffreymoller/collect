@@ -1,0 +1,51 @@
+script(id="links-template",type="template")
+    header
+        h1.center
+            svg(version="1.0",id="Layer_1",xmlns="http://www.w3.org/2000/svg",xmlns:xlink="http://www.w3.org/1999/xlink",x="0px",y="0px",viewBox="0 0 100 100",enable-background="new 0 0 100 100",xml:space="preserve")
+                path(d="M98.038,60.134L37.903,0L0,0v37.902l60.135,60.135c2.617,2.617,6.859,2.617,9.476,0L98.038,69.61 C100.654,66.994,100.654,62.751,98.038,60.134z M21.923,31.056c-2.617-2.617-2.617-6.859,0-9.476c2.616-2.617,6.858-2.617,9.476,0 c2.616,2.617,2.616,6.859,0,9.476C28.781,33.673,24.539,33.673,21.923,31.056z")
+            &nbsp;
+            span#contextTags
+                {{contextTags}}
+            span#search
+    div.center
+        div#loader
+        nav
+            div#adjacentTags
+                ul
+                    {{#each relatedTags.list}}
+                    {{#with this}}
+                    <li class="{{type}}" id="tag-{{name}}">
+                    <a href="/#tags/{{name}}">{{name}}</a><span class="count">{{count}}</span>
+                    <span class="add">+</span><span class="subtract">-</span>
+                    </li>
+                    {{/with}}
+                    {{/each}}
+            div#tags
+                ul
+                    {{#each tags}}
+                    {{#with this}}
+                    <li id="tag-{{name}}"><a href="/#tags/{{name}}">{{this.name}}</a>
+                    <span class="count">{{this.value}}</span><span class="add">+</span><span class="subtract">-</span></li>
+                    {{/with}}
+                    {{/each}}
+        section
+            div.pagination
+            div.links
+                ul
+                    {{#unless links.length}}
+                    <div id="emptySet"></div>
+                    {{/unless}}
+                    {{#each links}}
+                    <li>
+                    <a target="_blank" class="title" href="{{this.uri}}">{{title}}</a>
+                    <div class="date">{{date_string dateCreated}}</div>
+                    <div><a target="_blank" class="uri" href="{{this.uri}}">{{uri}}</a></div>
+                    <div class="tags">
+                    {{#each tags}}
+                    <a href="/#tags/{{this}}">{{this}}</a>
+                    {{/each}}
+                    </div>
+                    </li>
+                    {{/each}}
+
+            div.pagination
