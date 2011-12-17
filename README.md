@@ -8,7 +8,6 @@ http://collect.no.de
 TODO
 ----------
 
-* Templates -> Handlebars
 * Mobile
 * API Integration
     * Delicious - http://delicious.com/help/api 
