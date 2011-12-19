@@ -15,7 +15,7 @@ collect.pagination = function(page){
              $(".pagination").pagination(collectionLength, {
                 callback: _.bind(pageSelectCallback, this),
                 current_page: this.page, 
-                num_display_entries: 20,
+                num_display_entries: 15,
                 num_edge_entries: 1,
                 items_per_page: this.PAGE_LENGTH 
             });
