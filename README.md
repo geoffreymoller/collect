@@ -1,8 +1,6 @@
 Collect
 =================
-
 Collect is a link aggregator and display utility.
-
 http://collect.no.de
 
 TODO
@@ -11,8 +9,9 @@ TODO
 * Mobile
 * API Integration
     * Delicious - http://delicious.com/help/api 
-    * Evernote - http://www.evernote.com/about/developer/api/
-    * Twitter - https://dev.twitter.com 
+    * ?Evernote - http://www.evernote.com/about/developer/api/
+    * ?Twitter - https://dev.twitter.com 
+* Offline Access
 * Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Fix Extension Graphic Status Event issues
 * Edit/Delete links from web UI
