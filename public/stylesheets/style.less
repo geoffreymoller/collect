@@ -111,9 +111,7 @@ body.vis{
 
     li {
         list-style-type: none;
-        &.first-child {
-
-        }
+        position: relative;
     }
 
     #loader {
@@ -204,14 +202,18 @@ body.vis{
             li {
 
                 &:first-child {
-                    border-top: 0;
-                    padding-top: 0;
                 }
             
                 color: #000;
                 margin-bottom: 15px;
                 padding: 5px 0 0 0;
                 border-top: 1px solid #ccc;
+
+                a.delete {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                }
 
                 div {
                     color: #666;

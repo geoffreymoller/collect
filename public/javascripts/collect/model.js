@@ -24,6 +24,7 @@ collect.Model.prototype.createLink = function(datum, index, array){
 
     var link = new this.Link({
         couchId: datum.couchId,
+        couchRev: datum.couchRev,
         dateCreated: datum.dateCreated,
         uri: datum.uri,
         title: datum.title,

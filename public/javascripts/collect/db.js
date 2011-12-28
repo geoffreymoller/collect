@@ -115,6 +115,7 @@ collect.db.prototype.addLink = function(store, link, callback) {
   var that = this;
   var data = {
     "couchId": link.id,
+    "couchRev": link.value.rev,
     "title": link.value.title,
     "uri": link.value.uri,
     "tags": link.value.tags ? link.value.tags.sort() : [] ,
