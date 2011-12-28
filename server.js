@@ -152,6 +152,19 @@ app.get('/getURIByKey', function(req, res){
 
 });
 
+app.get('/delete', function(req, res){
+
+    var query = req.query;
+    var id = query.id;
+    var rev = query.rev;
+
+    console.log(id, rev);
+
+    var callback = getCallback('Link Deleted!', res);
+    db.remove(id, rev, callback)
+
+});
+
 app.get('/save', function(req, res){
 
     var query = req.query;

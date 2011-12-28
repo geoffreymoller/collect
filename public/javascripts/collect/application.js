@@ -42,6 +42,23 @@ collect.Application = Backbone.Router.extend({
             template: "#links-template",
             render: function(layout) {
                 return layout(this).render(this.model);
+            },
+            events: {
+                "click .delete": "deleteHandler"
+            },
+            deleteHandler: function(e){
+                e.preventDefault();
+                var _delete = confirm('Are you sure you want to delete this link?');
+                if(_delete){
+                    var target = $(e.target);
+                    var href = target.attr('href');
+                    var parts = href.split('/');
+                    var id = parts[2];
+                    var rev = parts[3];
+                    $.get('/delete', {id: id, rev: rev}, function (err, res) {
+                        // Handle response
+                    });
+                }
             }
         })
 
