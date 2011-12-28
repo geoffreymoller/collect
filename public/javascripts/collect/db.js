@@ -80,7 +80,7 @@ collect.db.prototype.open = function() {
         if(db.objectStoreNames.contains("link")) {
           db.deleteObjectStore("link");
         }
-        var store = db.createObjectStore("link", {keyPath: "uri"});
+        var store = db.createObjectStore("link", {keyPath: "couchId"});
         store.createIndex("dateCreatedDesc", "dateCreatedDesc", { unique: false }); 
       };
     }
@@ -133,7 +133,7 @@ collect.db.prototype.addLink = function(store, link, callback) {
 
 };
 
-collect.db.prototype.deleteLink = function(id) {
+collect.db.prototype.delete = function(id) {
   
   var that = this;
   var db = this.db;
@@ -141,9 +141,12 @@ collect.db.prototype.deleteLink = function(id) {
   var store = trans.objectStore("link");
 
   var request = store.delete(id);
-  request.onsuccess = function(e) { };
+  request.onsuccess = function(e) { 
+    console.log("Successfully Deleted Link: ", id);
+  }
   request.onerror = function(e) {
-    console.log("Error Adding: ", e);
+    console.log("Error Deleting Link: ", id);
+    console.dir(e);
   };
 
 };

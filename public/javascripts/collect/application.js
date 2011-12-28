@@ -55,9 +55,7 @@ collect.Application = Backbone.Router.extend({
                     var parts = href.split('/');
                     var id = parts[2];
                     var rev = parts[3];
-                    $.get('/delete', {id: id, rev: rev}, function (err, res) {
-                        // Handle response
-                    });
+                    collect.model.delete(id, rev);
                 }
             }
         })
