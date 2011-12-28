@@ -951,17 +951,10 @@
     // This only works for delegate-able events: not `focus`, `blur`, and
     // not `change`, `submit`, and `reset` in Internet Explorer.
     delegateEvents : function(events) {
-        //console.dir(events);
       if (!(events || (events = this.events))) return;
-        //console.dir(this.events);
       if (_.isFunction(events)) events = events.call(this);
       $(this.el).unbind('.delegateEvents' + this.cid);
-        //console.dir(this);
       for (var key in events) {
-        //console.log(key);
-        console.log(this);
-        console.log(this.events);
-        console.log(events[key]);
         var method = this[events[key]];
         if (!method) throw new Error('Event "' + events[key] + '" does not exist');
         var match = key.match(eventSplitter);
