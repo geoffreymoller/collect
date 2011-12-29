@@ -143,6 +143,7 @@ collect.db.prototype.delete = function(id) {
   var request = store.delete(id);
   request.onsuccess = function(e) { 
     console.log("Successfully Deleted Link: ", id);
+    collect.doc.trigger('/link/delete/success');
   }
   request.onerror = function(e) {
     console.log("Error Deleting Link: ", id);

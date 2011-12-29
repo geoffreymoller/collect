@@ -33,7 +33,7 @@ collect.Model.prototype.removeLinkHandler = function(model, collection){
     });
 }
 
-collect.Model.prototype.delete = function(id, rev, callbacks){
+collect.Model.prototype.delete = function(id, rev){
     var contextModel = this.linkCollection.find(function(link){
         return link.get('couchId') === id;
     });

@@ -7,6 +7,9 @@ collect.Application = Backbone.Router.extend({
         Handlebars.registerHelper('date_string', function(milliseconds) {
           return collect.Model.formatDate(milliseconds);
         });
+        collect.doc.bind('/link/delete/success', function(){
+            Backbone.history.loadUrl(Backbone.history.fragment);
+        });
         Backbone.LayoutManager.configure({
           render: function(template, context) {
             var result = Handlebars.compile(template)(context);
@@ -50,6 +53,8 @@ collect.Application = Backbone.Router.extend({
                 e.preventDefault();
                 var _delete = confirm('Are you sure you want to delete this link?');
                 if(_delete){
+                    //TODO - bind individual links to models instead of hacking the data from the view layer,
+                    //reconcile Model.prototype.delete;
                     var target = $(e.target);
                     var href = target.attr('href');
                     var parts = href.split('/');
