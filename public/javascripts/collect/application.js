@@ -77,10 +77,13 @@ collect.Application = Backbone.Router.extend({
 
         var model = collect.model;
         model.context.set({'context': contextTags});
+
         var contextTags = contextTags.split('+');
-        //TODO - memoize these:
         var relatedTags = model.relatedTags(contextTags);
         var contextLinks = model.contextLinks(contextTags); 
+        contextLinks = contextLinks.filter(function(link){
+            return !!!link.deleted;
+        });
 
         var pagination = new collect.pagination(page);
         var links = new Backbone.LayoutManager({
@@ -92,11 +95,7 @@ collect.Application = Backbone.Router.extend({
                         return !!!relatedTags.map[tag.name];
                     }), 
                     relatedTags: relatedTags, 
-                    links: contextLinks
-                        .slice(pagination.start, pagination.end)
-                        .filter(function(link){
-                            return !!!link.deleted;
-                        }),
+                    links: contextLinks.slice(pagination.start, pagination.end), 
                     contextTags: model.context.get('context') || 'all'}
                 })
             }
