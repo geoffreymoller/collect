@@ -42,8 +42,6 @@ collect.Model.prototype.delete = function(id, rev){
 
 collect.Model.prototype.createLink = function(link, index, array){
 
-    if(link.deleted) return;
-
     var _link = new this.Link({
         couchId: link.couchId,
         couchRev: link.couchRev,
