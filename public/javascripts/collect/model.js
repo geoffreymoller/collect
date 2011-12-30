@@ -40,21 +40,24 @@ collect.Model.prototype.delete = function(id, rev){
     this.linkCollection.remove(contextModel);
 }
 
-collect.Model.prototype.createLink = function(datum, index, array){
+collect.Model.prototype.createLink = function(link, index, array){
 
-    var link = new this.Link({
-        couchId: datum.couchId,
-        couchRev: datum.couchRev,
-        dateCreated: datum.dateCreated,
-        uri: datum.uri,
-        title: datum.title,
-        tags: datum.tags
+    if(link.deleted) return;
+
+    var _link = new this.Link({
+        couchId: link.couchId,
+        couchRev: link.couchRev,
+        dateCreated: link.dateCreated,
+        uri: link.uri,
+        title: link.title,
+        tags: link.tags,
+        deleted: link.deleted
     });
 
-    this.linkCollection.add(link);
+    this.linkCollection.add(_link);
 
-    if(datum.tags){
-        this.createTagStructures(datum.tags, index);
+    if(link.tags){
+        this.createTagStructures(link.tags, index);
     }
 
 }
@@ -183,7 +186,7 @@ collect.Model.prototype.contextLinks  = function(contextTags){
 
         var indexes;
         if(contextTags.length > 1){
-            var intersection = _.intersection.apply({}, tagIndexes);
+            var intersection = _.intersection(tagIndexes);
             indexes = intersection;
         }
         else {

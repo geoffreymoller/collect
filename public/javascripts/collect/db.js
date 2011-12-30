@@ -105,14 +105,7 @@ collect.db.prototype.addLinks = function(data) {
     collect.utility.time('DB::addLinks');
 
     _.each(data.rows, _.bind(function(link){
-        if(link.value.deleted){
-            if(this.lastUpdated){
-                store.delete(link.id);
-            }
-        }
-        else {
-            this.addLink.apply(this, [store, link]);
-        }
+        this.addLink(store, link);
     }, this));
 
 }
@@ -149,7 +142,8 @@ collect.db.prototype.addLink = function(store, link, callback) {
     "dateCreated": link.value.date_created,
     //TODO - replace dateCreatedDesc with keyrange / descending query
     "dateCreatedDesc": 10000000000000000 - link.value.date_created,
-    "dateModified": link.value.date_modified
+    "dateModified": link.value.date_modified,
+    "deleted": link.value.deleted
   };
 
   var request = store.put(data);
