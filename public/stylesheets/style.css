@@ -160,6 +160,10 @@ body.vis div#search {
   padding: 5px 0 0 0;
   border-top: 1px solid #ccc;
 }
+#links section ul li a.title {
+  display: block;
+  width: 700px;
+}
 #links section ul li a.delete {
   position: absolute;
   right: 0;

@@ -73,7 +73,7 @@ collect.db.prototype.open = function() {
     that.db = e.target.result;
     var db = that.db;
 
-    if (version != db.version) {
+    if (version !== db.version) {
       var setVersionRequest = db.setVersion(version);
       setVersionRequest.onerror = that.onerror;
       setVersionRequest.onsuccess = function(e) {
@@ -105,10 +105,37 @@ collect.db.prototype.addLinks = function(data) {
     collect.utility.time('DB::addLinks');
 
     _.each(data.rows, _.bind(function(link){
-        this.addLink.apply(this, [store, link]);
+        if(link.value.deleted){
+            if(this.lastUpdated){
+                store.delete(link.id);
+            }
+        }
+        else {
+            this.addLink.apply(this, [store, link]);
+        }
     }, this));
 
 }
+
+collect.db.prototype.delete = function(id) {
+  
+  var that = this;
+  var db = this.db;
+  var trans = db.transaction(["link"], IDBTransaction.READ_WRITE);
+  var store = trans.objectStore("link");
+
+  var request = store.delete(id);
+  request.onsuccess = function(e) { 
+    console.log("Successfully Deleted Link: ", id);
+    collect.doc.trigger('/link/delete/success');
+  }
+  request.onerror = function(e) {
+    console.log("Error Deleting Link: ", id);
+    console.dir(e);
+  };
+
+};
+
 
 collect.db.prototype.addLink = function(store, link, callback) {
 
@@ -129,25 +156,6 @@ collect.db.prototype.addLink = function(store, link, callback) {
   request.onsuccess = function(e) { };
   request.onerror = function(e) {
     console.log("Error Adding Link: ", e);
-  };
-
-};
-
-collect.db.prototype.delete = function(id) {
-  
-  var that = this;
-  var db = this.db;
-  var trans = db.transaction(["link"], IDBTransaction.READ_WRITE);
-  var store = trans.objectStore("link");
-
-  var request = store.delete(id);
-  request.onsuccess = function(e) { 
-    console.log("Successfully Deleted Link: ", id);
-    collect.doc.trigger('/link/delete/success');
-  }
-  request.onerror = function(e) {
-    console.log("Error Deleting Link: ", id);
-    console.dir(e);
   };
 
 };
