@@ -73,14 +73,14 @@ collect.db.prototype.open = function() {
     that.db = e.target.result;
     var db = that.db;
 
-    if (version != db.version) {
+    if (version !== db.version) {
       var setVersionRequest = db.setVersion(version);
       setVersionRequest.onerror = that.onerror;
       setVersionRequest.onsuccess = function(e) {
         if(db.objectStoreNames.contains("link")) {
           db.deleteObjectStore("link");
         }
-        var store = db.createObjectStore("link", {keyPath: "uri"});
+        var store = db.createObjectStore("link", {keyPath: "couchId"});
         store.createIndex("dateCreatedDesc", "dateCreatedDesc", { unique: false }); 
       };
     }
@@ -105,34 +105,12 @@ collect.db.prototype.addLinks = function(data) {
     collect.utility.time('DB::addLinks');
 
     _.each(data.rows, _.bind(function(link){
-        this.addLink.apply(this, [store, link]);
+        this.addLink(store, link);
     }, this));
 
 }
 
-collect.db.prototype.addLink = function(store, link, callback) {
-
-  var that = this;
-  var data = {
-    "couchId": link.id,
-    "title": link.value.title,
-    "uri": link.value.uri,
-    "tags": link.value.tags ? link.value.tags.sort() : [] ,
-    "dateCreated": link.value.date_created,
-    //TODO - replace dateCreatedDesc with keyrange / descending query
-    "dateCreatedDesc": 10000000000000000 - link.value.date_created,
-    "dateModified": link.value.date_modified
-  };
-
-  var request = store.put(data);
-  request.onsuccess = function(e) { };
-  request.onerror = function(e) {
-    console.log("Error Adding Link: ", e);
-  };
-
-};
-
-collect.db.prototype.deleteLink = function(id) {
+collect.db.prototype.delete = function(id) {
   
   var that = this;
   var db = this.db;
@@ -140,9 +118,38 @@ collect.db.prototype.deleteLink = function(id) {
   var store = trans.objectStore("link");
 
   var request = store.delete(id);
+  request.onsuccess = function(e) { 
+    console.log("Successfully Deleted Link: ", id);
+    collect.doc.trigger('/link/delete/success');
+  }
+  request.onerror = function(e) {
+    console.log("Error Deleting Link: ", id);
+    console.dir(e);
+  };
+
+};
+
+
+collect.db.prototype.addLink = function(store, link, callback) {
+
+  var that = this;
+  var data = {
+    "couchId": link.id,
+    "couchRev": link.value.rev,
+    "title": link.value.title,
+    "uri": link.value.uri,
+    "tags": link.value.tags ? link.value.tags.sort() : [] ,
+    "dateCreated": link.value.date_created,
+    //TODO - replace dateCreatedDesc with keyrange / descending query
+    "dateCreatedDesc": 10000000000000000 - link.value.date_created,
+    "dateModified": link.value.date_modified,
+    "deleted": link.value.deleted
+  };
+
+  var request = store.put(data);
   request.onsuccess = function(e) { };
   request.onerror = function(e) {
-    console.log("Error Adding: ", e);
+    console.log("Error Adding Link: ", e);
   };
 
 };

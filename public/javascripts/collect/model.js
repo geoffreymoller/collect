@@ -9,6 +9,7 @@ collect.Model = function(callback){
         this.context = new this.Context();
         this.LinkCollection = Backbone.Collection.extend();
         this.linkCollection = new this.LinkCollection();
+        this.linkCollection.bind('remove', goog.bind(this.removeLinkHandler, this));
         this.Link = Backbone.Model.extend();
         this.Tag = Backbone.Model.extend();
         this.data.forEach(goog.bind(this.createLink, this));
@@ -16,24 +17,45 @@ collect.Model = function(callback){
         collect.doc.trigger('/model/load');
     }, this);
 
-    var db = new collect.db(callback);
+    this.db = new collect.db(callback);
 
 }
 
-collect.Model.prototype.createLink = function(datum, index, array){
+collect.Model.prototype.removeLinkHandler = function(model, collection){
+    var id = model.get('couchId');
+    var rev = model.get('couchRev');
+    var deletion = $.get('/delete', {id: id, rev: rev});
+    deletion.success(goog.bind(function(data){
+        this.db.delete(id);
+    }, this));
+    deletion.error(function(data){
+        throw new Error('Error deleting link at remote DB');
+    });
+}
 
-    var link = new this.Link({
-        couchId: datum.couchId,
-        dateCreated: datum.dateCreated,
-        uri: datum.uri,
-        title: datum.title,
-        tags: datum.tags
+collect.Model.prototype.delete = function(id, rev){
+    var contextModel = this.linkCollection.find(function(link){
+        return link.get('couchId') === id;
+    });
+    this.linkCollection.remove(contextModel);
+}
+
+collect.Model.prototype.createLink = function(link, index, array){
+
+    var _link = new this.Link({
+        couchId: link.couchId,
+        couchRev: link.couchRev,
+        dateCreated: link.dateCreated,
+        uri: link.uri,
+        title: link.title,
+        tags: link.tags,
+        deleted: link.deleted
     });
 
-    this.linkCollection.add(link);
+    this.linkCollection.add(_link);
 
-    if(datum.tags){
-        this.createTagStructures(datum.tags, index);
+    if(link.tags){
+        this.createTagStructures(link.tags, index);
     }
 
 }
@@ -162,8 +184,7 @@ collect.Model.prototype.contextLinks  = function(contextTags){
 
         var indexes;
         if(contextTags.length > 1){
-            var intersection = _.intersection.apply({}, tagIndexes);
-            indexes = intersection;
+            indexes = _.intersection.apply({}, tagIndexes);
         }
         else {
             indexes = tagIndexes[0];

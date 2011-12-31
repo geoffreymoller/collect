@@ -82,6 +82,7 @@ body.vis div#search {
 }
 #links li {
   list-style-type: none;
+  position: relative;
 }
 #links #loader {
   height: 22px;
@@ -159,9 +160,14 @@ body.vis div#search {
   padding: 5px 0 0 0;
   border-top: 1px solid #ccc;
 }
-#links section ul li:first-child {
-  border-top: 0;
-  padding-top: 0;
+#links section ul li a.title {
+  display: block;
+  width: 700px;
+}
+#links section ul li a.delete {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 #links section ul li div {
   color: #666;
