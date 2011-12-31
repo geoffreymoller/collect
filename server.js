@@ -5,6 +5,8 @@
 
 var
   express = require('express'),
+  path = require('path'),
+  fs = require('fs'),
   gzip = require('connect-gzip'),
   sys = require('util'),
   cradle = require('cradle'),
@@ -83,6 +85,20 @@ app.configure('development', function(){
 app.configure('production', function(){
   env = 'prod';
   app.use(express.errorHandler()); 
+});
+
+app.get("/offline.manifest", function(req, res){
+
+  var filePath = path.join(__dirname, 'offline.manifest');
+  var stream = fs.createReadStream(filePath);
+  res.header("Content-Type", "text/cache-manifest");
+  stream.on('data', function(data) {
+    res.write(data);
+  });
+  stream.on('end', function() {
+    res.end();
+  });
+
 });
 
 // Routes
