@@ -184,8 +184,7 @@ collect.Model.prototype.contextLinks  = function(contextTags){
 
         var indexes;
         if(contextTags.length > 1){
-            var intersection = _.intersection(tagIndexes);
-            indexes = intersection;
+            indexes = _.intersection.apply({}, tagIndexes);
         }
         else {
             indexes = tagIndexes[0];
