@@ -1,10 +1,11 @@
 CACHE MANIFEST
 
-/javascripts/collect.js
-/stylesheets/collect.css
-
+CACHE:
+/javascripts/collect_all.js
+/stylesheets/collect_all.css
 http://fonts.googleapis.com/css?family=Droid+Sans:400,700 
 
+http://www.google-analytics.com/ga.js 
 /stylesheets/bootstrap.min.css 
 /stylesheets/pagination.css 
 /stylesheets/style.css 
@@ -25,4 +26,5 @@ http://fonts.googleapis.com/css?family=Droid+Sans:400,700
 /javascripts/collect/model.js 
 /javascripts/collect/db.js 
 
-http://www.google-analytics.com/ga.js 
+NETWORK:
+*

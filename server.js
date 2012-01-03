@@ -50,13 +50,13 @@ var javascriptFiles = [
 
 var assetManagerGroups = {
     'js': {
-        'route': /\/javascripts\/collect.js/
+        'route': /\/javascripts\/collect_all.js/
         , 'path': './public/javascripts/'
         , 'dataType': 'javascript'
         , 'files': javascriptFiles
     },
     'css': {
-        'route': /\/stylesheets\/collect.css/
+        'route': /\/stylesheets\/collect_all.css/
         , 'path': './public/stylesheets/'
         , 'dataType': 'css'
         , 'files': cssFiles
@@ -76,26 +76,44 @@ app.configure(function(){
 });
 
 var env;
+var manifest;
 app.configure('development', function(){
   env = 'dev';
   port = 3000;
+  manifest = 'offline.manifest';
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 app.configure('production', function(){
   env = 'prod';
+  manifest = 'offline.manifest';
   app.use(express.errorHandler()); 
+});
+
+app.get("/beacon", function(req, res){
+    res.header("Content-Type", "application/json");
+    res.write('{"online": "true"}') 
+    res.end();
 });
 
 app.get("/offline.manifest", function(req, res){
 
+  res.header("Content-Type", "text/cache-manifest");
+  res.header("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
+  res.header("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+  res.header("Pragma", "no-cache");
+
   var filePath = path.join(__dirname, 'offline.manifest');
   var stream = fs.createReadStream(filePath);
-  res.header("Content-Type", "text/cache-manifest");
+
   stream.on('data', function(data) {
     res.write(data);
   });
+
   stream.on('end', function() {
+    res.write('# Version:\n') 
+    res.write('# JS: ' + assetsManagerMiddleware.cacheHashes['js'] + '\n'); 
+    res.write('# CSS: ' + assetsManagerMiddleware.cacheHashes['css'] + '\n');
     res.end();
   });
 
@@ -114,6 +132,7 @@ app.get('/', function(req, res){
           title: 'Collect',
           serverTime: (new Date()).getTime(),
           env: env,
+          manifest: manifest,
           static: {
               javascriptFiles: javascriptFiles,
               javascriptHash: assetsManagerMiddleware.cacheHashes['js'],

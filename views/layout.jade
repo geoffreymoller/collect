@@ -1,11 +1,11 @@
 !!!5
-html
+html(manifest=manifest)
   head
     link(href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700', rel='stylesheet',type='text/css')
     title= title
 
     - if(env === 'prod')
-      link(rel="stylesheet", href="/stylesheets/collect.css?h=#{static.cssHash}")
+      link(rel="stylesheet", href="/stylesheets/collect_all.css")
     - else
       - each file in static.cssFiles
         link(rel="stylesheet", href="/stylesheets/#{file}")
@@ -13,7 +13,7 @@ html
   body!= body
 
   - if(env === 'prod')
-    script(src='javascripts/collect.js?h=#{static.javascriptHash}')
+    script(src='javascripts/collect_all.js')
   - else
     - each file in static.javascriptFiles
       script(src='javascripts/#{file}')
