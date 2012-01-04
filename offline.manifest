@@ -23,6 +23,7 @@ http://www.google-analytics.com/ga.js
 /javascripts/collect/chart/bubble.js 
 /javascripts/collect/utility.js 
 /javascripts/collect/application.js 
+/javascripts/collect/applicationCache.js 
 /javascripts/collect/model.js 
 /javascripts/collect/db.js 
 
