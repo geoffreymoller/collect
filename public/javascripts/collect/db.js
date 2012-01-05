@@ -7,8 +7,9 @@ if ('webkitIndexedDB' in window) {
   window.IDBKeyRange = window.webkitIDBKeyRange;
 }
 
-//TODO - module to worker
 collect.db = function(modelCallback){
+
+  this.modelCallback = modelCallback;
 
   this.__defineGetter__('lastUpdated', function() {
     return localStorage['lastUpdated'];
@@ -18,12 +19,62 @@ collect.db = function(modelCallback){
     localStorage['lastUpdated'] = prop;
   });
 
-  this.modelCallback = modelCallback;
-  this.getLinks();
+  collect.__defineGetter__('onLine', function() {
+    return localStorage['onLine'];
+  });
+
+  collect.__defineSetter__('onLine', function(prop) {
+    localStorage['onLine'] = prop;
+  });
+
+  var jqxhr = $.getJSON("/beacon", function() {
+    collect.onLine = true;
+  })
+  .error(function() { 
+    collect.onLine = false;
+  })
+  .complete(_.bind(function(){
+    this.open();
+  }, this));
 
 }
 
-collect.db.prototype.getLinks = function(){
+collect.db.prototype.open = function() {
+
+  var that = this;
+  var request = indexedDB.open("links");
+
+  request.onsuccess = function(e) {
+    
+    var version = "1.99";
+    that.db = e.target.result;
+    var db = that.db;
+
+    if (version !== db.version) {
+      var setVersionRequest = db.setVersion(version);
+      setVersionRequest.onerror = that.onerror;
+      setVersionRequest.onsuccess = function(e) {
+        if(db.objectStoreNames.contains("link")) {
+          db.deleteObjectStore("link");
+        }
+        var store = db.createObjectStore("link", {keyPath: "couchId"});
+        store.createIndex("dateCreatedDesc", "dateCreatedDesc", { unique: false }); 
+        that.main();
+      };
+    }
+    else {
+        that.main();
+    }
+
+  };
+
+  request.onerror = this.onerror;
+
+}
+
+
+
+collect.db.prototype.main = function(){
 
     collect.doc.bind('/db/links/add/done /db/links/nonew', _.bind(function(){
         this.getAllLinks(_.bind(function(links){
@@ -31,19 +82,21 @@ collect.db.prototype.getLinks = function(){
         }, this));
     }, this)) 
 
-    this.open();
-
     var path = this.getPath();
-    var links;
-    links = $.getJSON(path);
-    links.success(_.bind(function(data){
-        if(data.rows.length){
-            this.addLinks(data);
-        }
-        else {
-            collect.doc.trigger('/db/links/nonew');
-        }
-    }, this));
+    if(!navigator.onLine || !collect.onLine){
+        collect.doc.trigger('/db/links/nonew');
+    }
+    else {
+        var links = $.getJSON(path);
+        links.success(_.bind(function(data){
+            if(data.rows.length){
+                this.addLinks(data);
+            }
+            else {
+                collect.doc.trigger('/db/links/nonew');
+            }
+        }, this));
+    }
 
 }
 
@@ -62,33 +115,6 @@ collect.db.prototype.getPath = function(){
 collect.db.prototype.onerror = function(e) {
   console.log(e);
 };
-
-collect.db.prototype.open = function() {
-
-  var that = this;
-  var request = indexedDB.open("links");
-
-  request.onsuccess = function(e) {
-    var version = "1.99";
-    that.db = e.target.result;
-    var db = that.db;
-
-    if (version !== db.version) {
-      var setVersionRequest = db.setVersion(version);
-      setVersionRequest.onerror = that.onerror;
-      setVersionRequest.onsuccess = function(e) {
-        if(db.objectStoreNames.contains("link")) {
-          db.deleteObjectStore("link");
-        }
-        var store = db.createObjectStore("link", {keyPath: "couchId"});
-        store.createIndex("dateCreatedDesc", "dateCreatedDesc", { unique: false }); 
-      };
-    }
-  };
-
-  request.onerror = this.onerror;
-
-}
 
 collect.db.prototype.addLinks = function(data) {
 

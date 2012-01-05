@@ -1,8 +1,8 @@
 ;"use strict";
 
-collect.Model = function(callback){
+collect.Model = function(appCallback){
 
-    var callback = _.bind(function(data){
+    var dbCallback = _.bind(function(data){
         this.data = data;
         this.tagDict = {};
         this.Context = Backbone.Model.extend();
@@ -14,10 +14,10 @@ collect.Model = function(callback){
         this.Tag = Backbone.Model.extend();
         this.data.forEach(goog.bind(this.createLink, this));
         this.sortTags();
-        collect.doc.trigger('/model/load');
+        appCallback();
     }, this);
 
-    this.db = new collect.db(callback);
+    this.db = new collect.db(dbCallback);
 
 }
 

@@ -1,0 +1,10 @@
+CACHE MANIFEST
+
+CACHE:
+/javascripts/collect_all.js
+/stylesheets/collect_all.css
+http://fonts.googleapis.com/css?family=Droid+Sans:400,700 
+
+NETWORK:
+*
+
