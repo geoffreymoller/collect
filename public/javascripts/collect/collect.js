@@ -7,8 +7,7 @@ collect.DEBUG =  {
 $(document).ready(function(e) {
   collect.loader();
   collect.doc = $(document); //root reference for pub-sub 
-  collect.appCache = new collect.ApplicationCache(); 
-  collect.doc.bind('/collect/appcache/ready', collect.main); 
+  collect.main();
 });
 
 collect.main = function(){
