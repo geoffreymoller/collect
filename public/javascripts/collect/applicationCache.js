@@ -1,18 +1,25 @@
-collect.applicationCache = new function(){
+collect.ApplicationCache = function(){
+  
+  var cache = window.applicationCache;
 
-  window.addEventListener('load', function(e) {
-
-    var cache = window.applicationCache;
-    cache.addEventListener('updateready', function(e) {
-      if (cache.status === cache.UPDATEREADY) {
-        cache.swapCache();
-        if (confirm('A new version of this site is available. Load it?')) {
-          window.location.reload();
-        }
-      } 
-    }, false);
-
+  //First cache save
+  cache.addEventListener('cached', function(e) {
+    collect.doc.trigger('/collect/appcache/ready');
   }, false);
 
+  cache.addEventListener('updateready', function(e) {
+      cache.swapCache();
+      setTimeout(function(){
+        window.location.reload();
+      }, 300);
+  }, false);
+
+  cache.addEventListener('noupdate', function(e) {
+    collect.doc.trigger('/collect/appcache/ready');
+  }, false);
+
+  cache.addEventListener('obsolete', function(e) {
+      window.location.reload();
+  }, false);
 
 }
