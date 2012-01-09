@@ -58,12 +58,12 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
 endif
 set shortmess=aoO
 badd +1 server.js
-badd +0 views/layout.jade
-badd +0 views/index.jade
-badd +0 public/javascripts/collect/collect.js
-badd +0 public/javascripts/collect/applicationCache.js
-badd +0 public/javascripts/collect/model.js
-badd +0 public/javascripts/collect/db.js
+badd +1 views/layout.jade
+badd +1 views/index.jade
+badd +1 public/javascripts/collect/collect.js
+badd +1 public/javascripts/collect/applicationCache.js
+badd +1 public/javascripts/collect/model.js
+badd +1 public/javascripts/collect/db.js
 args server.js views/layout.jade views/index.jade public/javascripts/collect/collect.js public/javascripts/collect/applicationCache.js
 edit server.js
 set splitbelow splitright
@@ -173,12 +173,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 23) / 46)
+let s:l = 191 - ((27 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+191
+normal! 04l
 tabedit views/layout.jade
 set splitbelow splitright
 set nosplitbelow
@@ -710,8 +710,7 @@ setlocal matchpairs=(:),{:},[:]
 setlocal modeline
 setlocal modifiable
 setlocal nrformats=octal,hex
-set number
-setlocal number
+setlocal nonumber
 setlocal numberwidth=4
 setlocal omnifunc=ccomplete#Complete
 setlocal path=
@@ -748,11 +747,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 23) / 46)
+let s:l = 209 - ((43 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+209
 normal! 0
 tabedit public/javascripts/collect/applicationCache.js
 set splitbelow splitright
@@ -869,7 +868,7 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabnext 6
+tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif
