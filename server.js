@@ -89,12 +89,6 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-app.get("/beacon", function(req, res){
-    res.header("Content-Type", "application/json");
-    res.write('{"online": "true"}') 
-    res.end();
-});
-
 // Routes
 app.get('/', function(req, res){
 

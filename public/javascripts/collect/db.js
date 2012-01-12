@@ -19,23 +19,7 @@ collect.db = function(modelCallback){
     localStorage['lastUpdated'] = prop;
   });
 
-  collect.__defineGetter__('onLine', function() {
-    return localStorage['onLine'];
-  });
-
-  collect.__defineSetter__('onLine', function(prop) {
-    localStorage['onLine'] = prop;
-  });
-
-  var jqxhr = $.getJSON("/beacon", function() {
-    collect.onLine = true;
-  })
-  .error(function() { 
-    collect.onLine = false;
-  })
-  .complete(_.bind(function(){
-    this.open();
-  }, this));
+  this.open();
 
 }
 
@@ -83,20 +67,15 @@ collect.db.prototype.main = function(){
     }, this)) 
 
     var path = this.getPath();
-    if(!navigator.onLine || !collect.onLine){
-        collect.doc.trigger('/db/links/nonew');
-    }
-    else {
-        var links = $.getJSON(path);
-        links.success(_.bind(function(data){
-            if(data.rows.length){
-                this.addLinks(data);
-            }
-            else {
-                collect.doc.trigger('/db/links/nonew');
-            }
-        }, this));
-    }
+    var links = $.getJSON(path);
+    links.success(_.bind(function(data){
+        if(data.rows.length){
+            this.addLinks(data);
+        }
+        else {
+            collect.doc.trigger('/db/links/nonew');
+        }
+    }, this));
 
 }
 
