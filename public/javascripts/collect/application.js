@@ -96,7 +96,7 @@ collect.Application = Backbone.Router.extend({
                     }), 
                     relatedTags: relatedTags, 
                     links: contextLinks.slice(pagination.start, pagination.end), 
-                    contextTags: model.context.get('context') || 'all'}
+                    contextTags: model.context.get('context').replace(/\+/g, ' AND ')  || 'all'}
                 })
             }
         });
