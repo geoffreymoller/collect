@@ -1,11 +1,10 @@
 Collect
 =================
-Collect is a link aggregator with a local data store and offline access. 
+Collect is a link aggregator with a local data store 
 http://collect.no.de
 
 TODO
 ----------
-* Offline Access
 * Notes
 * Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Fix Extension Graphic Status Event issues
@@ -21,4 +20,4 @@ TODO
 * Mobile Behaviors - Filter by tag, etc
 * Loading screen for Chrome extension
 * RSS Feed
-
+* Offline Access
