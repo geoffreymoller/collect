@@ -144,6 +144,7 @@ collect.db.prototype.addLink = function(store, link, callback) {
     "title": link.value.title,
     "uri": link.value.uri,
     "tags": link.value.tags ? link.value.tags.sort() : [] ,
+    "notes": link.value.notes,
     "dateCreated": link.value.date_created,
     //TODO - replace dateCreatedDesc with keyrange / descending query
     "dateCreatedDesc": 10000000000000000 - link.value.date_created,

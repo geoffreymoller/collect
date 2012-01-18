@@ -128,13 +128,33 @@ app.get('/links', function(req, res){
 
 });
 
-app.put('/update', function(req, res){
+app.post('/save', function(req, res){
 
-    var id = req.query.id; 
-    var path =  '/_design/app/_update/in-place/' + id;
-    sys.puts('path: ' + path);
+    var body = req.body;
+    var payload = {
+        title: body.title, 
+        URI: body.uri,
+        notes: body.notes,
+        date: new Date().getTime()
+    }
 
-    var tags = req.query.tags;
+    var tags = body.tags;
+    if(tags){
+        tags = tags.split(',');
+        payload.tags = tags;
+    }
+
+    var id = uuid()
+    var callback = getCallback('Document Saved!', res);
+    db.save(id, payload, callback);
+
+});
+
+app.post('/update', function(req, res){
+
+    var id = req.body.id; 
+
+    var tags = req.body.tags;
     if(tags && tags.length){
         tags = tags.split(',');
     }
@@ -142,9 +162,16 @@ app.put('/update', function(req, res){
         tags = []; 
     }
 
-    var id = req.query.id;
+    var payload = {
+      "tags": tags,
+      "date_modified": new Date().getTime(),
+      "notes": req.body.notes,
+      "deleted": false
+    }
+
+    var id = req.body.id;
     var callback = getCallback('Link Updated!', res);
-    db.merge(id, {"tags": tags, "date_modified": new Date().getTime()}, callback);
+    db.merge(id, payload, callback);
 })
 
 app.get('/getURIByKey', function(req, res){
@@ -163,27 +190,6 @@ app.get('/delete', function(req, res){
     var id = query.id;
     var callback = getCallback('Link Deleted!', res);
     db.merge(id, {"deleted": true, "date_modified": new Date().getTime()}, callback);
-
-});
-
-app.get('/save', function(req, res){
-
-    var query = req.query;
-    var payload = {
-        title: query.title, 
-        URI: query.uri,
-        date: new Date().getTime()
-    }
-
-    var tags = query.tags;
-    if(tags){
-        tags = tags.split(',');
-        payload.tags = tags;
-    }
-
-    var id = uuid()
-    var callback = getCallback('Document Saved!', res);
-    db.save(id, payload, callback);
 
 });
 

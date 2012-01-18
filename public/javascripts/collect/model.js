@@ -49,6 +49,7 @@ collect.Model.prototype.createLink = function(link, index, array){
         uri: link.uri,
         title: link.title,
         tags: link.tags,
+        notes: link.notes,
         deleted: link.deleted
     });
 

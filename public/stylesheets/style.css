@@ -191,6 +191,11 @@ body.vis div#search {
   margin-right: 5px;
   padding: 3px;
 }
+#links section ul li div.notes {
+  font-size: 11px;
+  font-style: italic;
+  margin: 5px 0 -5px 0;
+}
 /* /#links */
 svg g {
   cursor: pointer;
