@@ -7,6 +7,18 @@ collect.Application = Backbone.Router.extend({
         Handlebars.registerHelper('date_string', function(milliseconds) {
           return collect.Model.formatDate(milliseconds);
         });
+        Handlebars.registerHelper('truncate', function(text, chars) {
+          return goog.string.truncate(text, chars); 
+        });
+        Handlebars.registerHelper('note', function(noteText) {
+          var s = '<div class="note less">';
+          s += noteText;
+          if(noteText.length > 200){
+            s += '<div class="moreless"><div></div></div>';
+          }
+          s += '</div>';
+          return s; 
+        });
         collect.doc.bind('/link/delete/success', function(){
             Backbone.history.loadUrl(Backbone.history.fragment);
         });
@@ -47,7 +59,14 @@ collect.Application = Backbone.Router.extend({
                 return layout(this).render(this.model);
             },
             events: {
-                "click .delete": "deleteHandler"
+                "click .delete": "deleteHandler",
+                "click .moreless": "morelessHandler"
+            },
+            morelessHandler: function(e){
+              var target = $(e.target);
+              var note = target.parents('.note');
+              note.toggleClass('more')
+              .toggleClass('less');
             },
             deleteHandler: function(e){
                 e.preventDefault();
