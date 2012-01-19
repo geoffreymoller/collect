@@ -12,7 +12,7 @@ collect.Application = Backbone.Router.extend({
         });
         Handlebars.registerHelper('note', function(noteText) {
           var s = '<div class="note less">';
-          s += noteText;
+          s += html_sanitize(noteText);
           if(noteText.length > 200){
             s += '<div class="moreless"><div></div></div>';
           }

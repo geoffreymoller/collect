@@ -31,6 +31,8 @@ var cssFiles = [
 
 var javascriptFiles = [
     'collect-closure-compiled.js'
+    , 'html4-defs.js'
+    , 'html-sanitizer.js'
     , 'jquery-1.7.min.js'
     , 'jquery.pagination.js'
     , 'underscore-min.js'
