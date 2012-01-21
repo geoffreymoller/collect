@@ -56,12 +56,12 @@ collect.Model.prototype.createLink = function(link, index, array){
     this.linkCollection.add(_link);
 
     if(link.tags){
-        this.createTagStructures(link.tags, index);
+        this.createTagIndex(link.tags, index);
     }
 
 }
 
-collect.Model.prototype.createTagStructures = function(tags, datumIndex){
+collect.Model.prototype.createTagIndex = function(tags, datumIndex){
 
     var delegate = function(tag, index, array){
         
