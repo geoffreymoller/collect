@@ -4,7 +4,7 @@ collect.Model = function(appCallback){
 
     var dbCallback = _.bind(function(data){
         this.data = data;
-        this.tagDict = {};
+        this.tagIndex = {};
         this.Context = Backbone.Model.extend();
         this.context = new this.Context();
         this.LinkCollection = Backbone.Collection.extend();
@@ -68,11 +68,11 @@ collect.Model.prototype.createTagStructures = function(tags, datumIndex){
         var context = [tag];
         var adjacentTags = _.difference(tags, context);
 
-        if(!this.tagDict[tag]){
-            this.tagDict[tag] = {count: 1, indexes: [datumIndex], adjacent: adjacentTags}
+        if(!this.tagIndex[tag]){
+            this.tagIndex[tag] = {count: 1, indexes: [datumIndex], adjacent: adjacentTags}
         }
         else {
-            var tag = this.tagDict[tag];
+            var tag = this.tagIndex[tag];
             tag.count++;
             tag.indexes.push(datumIndex);
             tag.adjacent = _.unique(tag.adjacent.concat(adjacentTags));
@@ -91,9 +91,9 @@ collect.Model.prototype.getMultipleAdjacency = function(){
 collect.Model.prototype.sortTags = function(){
 
     this.sortedTags = []
-    for(var tag in this.tagDict){
-        this.tagDict[tag].adjacent = this.tagDict[tag].adjacent.sort();
-        this.sortedTags.push({name: tag, value: this.tagDict[tag].count});
+    for(var tag in this.tagIndex){
+        this.tagIndex[tag].adjacent = this.tagIndex[tag].adjacent.sort();
+        this.sortedTags.push({name: tag, value: this.tagIndex[tag].count});
     }  
 
     this.sortedTags = this.sortedTags.sort(function(a, b) {
@@ -125,8 +125,8 @@ collect.Model.prototype.relatedTags  = function(contextTags){
         map: {}
     };
     contextTags.forEach(function(context){
-        if(context && model.tagDict[context]){
-            payload.list.push({name: context, type: 'active', count: model.tagDict[context].count});
+        if(context && model.tagIndex[context]){
+            payload.list.push({name: context, type: 'active', count: model.tagIndex[context].count});
             payload.map[context] = { type: 'active' };
         }
     });
@@ -134,7 +134,7 @@ collect.Model.prototype.relatedTags  = function(contextTags){
     if(contextTags.length > 1){
         var intersection;
         contextTags.forEach(function(tag){
-            var contextTag = model.tagDict[tag];
+            var contextTag = model.tagIndex[tag];
             if(contextTag){
                 if(!intersection){
                     intersection = contextTag.adjacent;
@@ -146,18 +146,18 @@ collect.Model.prototype.relatedTags  = function(contextTags){
         });
         if(intersection){
             intersection.forEach(function(adjacentNode){
-                payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagIndex[adjacentNode].count});
                 payload.map[adjacentNode] = { type: 'adjacent' };
             });
         }
     }
     else {
         contextTags.forEach(function(tag){
-            var contextTag = model.tagDict[tag];
+            var contextTag = model.tagIndex[tag];
             if(contextTag){
                 var adjacent = contextTag.adjacent;
                 adjacent.forEach(function(adjacentNode){
-                    payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                    payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagIndex[adjacentNode].count});
                     payload.map[adjacentNode] = { type: 'adjacent' };
                 });
             }
@@ -176,7 +176,7 @@ collect.Model.prototype.contextLinks  = function(contextTags){
     else{ 
         var tagIndexes = [];
         contextTags.forEach(function(tag, index, items){
-            var tag = model.tagDict[tag];
+            var tag = model.tagIndex[tag];
             if(tag){
                 var subList = tag.indexes;
                 tagIndexes.push(subList);
