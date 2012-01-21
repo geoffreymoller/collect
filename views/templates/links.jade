@@ -15,7 +15,7 @@ script(id="links-template",type="template")
                     {{#each relatedTags.list}}
                     {{#with this}}
                     <li class="{{type}}" id="tag-{{name}}">
-                    <a href="/#tags/{{name}}">{{name}}</a><span class="count">{{count}}</span>
+                    <a href="/#tags/{{name}}">{{truncate name 18}}</a><span class="count">{{count}}</span>
                     <span class="add">+</span><span class="subtract">-</span>
                     </li>
                     {{/with}}
@@ -24,7 +24,7 @@ script(id="links-template",type="template")
                 ul
                     {{#each tags}}
                     {{#with this}}
-                    <li id="tag-{{name}}"><a href="/#tags/{{name}}">{{this.name}}</a>
+                    <li id="tag-{{name}}"><a href="/#tags/{{name}}">{{truncate this.name 18}}</a>
                     <span class="count">{{this.value}}</span><span class="add">+</span><span class="subtract">-</span></li>
                     {{/with}}
                     {{/each}}
