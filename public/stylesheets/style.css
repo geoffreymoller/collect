@@ -2,7 +2,7 @@ body {
   padding: 20px;
 }
 body pre {
-  padding: 0 8px;
+  padding: 5px 8px;
 }
 body.vis {
   padding-top: 40px;
@@ -196,15 +196,20 @@ body.vis div#search {
 }
 #links section ul li div.note {
   background-color: #e7e7f0;
+  border-radius: 3px;
   font-size: 11px;
   font-style: italic;
   max-height: 57px;
   margin: 5px 0 -5px 0;
-  padding: 3px 8px;
+  padding: 5px 8px;
   overflow: hidden;
+}
+#links section ul li div.note pre {
+  font-family: "Helvetica Neue";
 }
 #links section ul li div.note div.moreless {
   background-color: #e7e7f0;
+  border-radius: 3px;
   height: 8px;
   position: absolute;
   bottom: 0px;
