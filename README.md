@@ -5,7 +5,7 @@ http://collect.no.de
 
 TODO
 ----------
-* Notes
+* Travis CI - http://about.travis-ci.org/docs/user/getting-started/
 * Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Fix Extension Graphic Status Event issues
 * Edit/Delete links from web UI
