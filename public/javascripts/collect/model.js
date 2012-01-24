@@ -4,7 +4,7 @@ collect.Model = function(appCallback){
 
     var dbCallback = _.bind(function(data){
         this.data = data;
-        this.tagDict = {};
+        this.tagInvertedIndex = {};
         this.Context = Backbone.Model.extend();
         this.context = new this.Context();
         this.LinkCollection = Backbone.Collection.extend();
@@ -40,7 +40,7 @@ collect.Model.prototype.delete = function(id, rev){
     this.linkCollection.remove(contextModel);
 }
 
-collect.Model.prototype.createLink = function(link, index, array){
+collect.Model.prototype.createLink = function(link, datumIndex, array){
 
     var _link = new this.Link({
         couchId: link.couchId,
@@ -56,30 +56,29 @@ collect.Model.prototype.createLink = function(link, index, array){
     this.linkCollection.add(_link);
 
     if(link.tags){
-        this.createTagStructures(link.tags, index);
+        this.createTagIndex(link.tags, datumIndex, this.tagInvertedIndex);
     }
 
 }
 
-collect.Model.prototype.createTagStructures = function(tags, datumIndex){
+collect.Model.prototype.createTagIndex = function(tags, datumIndex, tagInvertedIndex){
 
-    var delegate = function(tag, index, array){
+    var delegate = function(tag, index){
         
         var context = [tag];
         var adjacentTags = _.difference(tags, context);
 
-        if(!this.tagDict[tag]){
-            this.tagDict[tag] = {count: 1, indexes: [datumIndex], adjacent: adjacentTags}
+        if(!tagInvertedIndex[tag]){
+            tagInvertedIndex[tag] = {count: 1, indexes: [datumIndex], adjacent: adjacentTags}
         }
         else {
-            var tag = this.tagDict[tag];
+            var tag = tagInvertedIndex[tag];
             tag.count++;
             tag.indexes.push(datumIndex);
             tag.adjacent = _.unique(tag.adjacent.concat(adjacentTags));
         }
     }
 
-    delegate = goog.bind(delegate, this);
     tags.forEach(delegate);
 
 }
@@ -91,9 +90,9 @@ collect.Model.prototype.getMultipleAdjacency = function(){
 collect.Model.prototype.sortTags = function(){
 
     this.sortedTags = []
-    for(var tag in this.tagDict){
-        this.tagDict[tag].adjacent = this.tagDict[tag].adjacent.sort();
-        this.sortedTags.push({name: tag, value: this.tagDict[tag].count});
+    for(var tag in this.tagInvertedIndex){
+        this.tagInvertedIndex[tag].adjacent = this.tagInvertedIndex[tag].adjacent.sort();
+        this.sortedTags.push({name: tag, value: this.tagInvertedIndex[tag].count});
     }  
 
     this.sortedTags = this.sortedTags.sort(function(a, b) {
@@ -118,23 +117,21 @@ collect.Model.prototype.sortTags = function(){
 }
 
 collect.Model.prototype.relatedTags  = function(contextTags){
-    //TODO - bind handlers, remove closure
-    var model = this;
     var payload = {
         list: [],
         map: {}
     };
-    contextTags.forEach(function(context){
-        if(context && model.tagDict[context]){
-            payload.list.push({name: context, type: 'active', count: model.tagDict[context].count});
+    contextTags.forEach(_.bind(function(context){
+        if(context && this.tagInvertedIndex[context]){
+            payload.list.push({name: context, type: 'active', count: this.tagInvertedIndex[context].count});
             payload.map[context] = { type: 'active' };
         }
-    });
+    }, this));
 
     if(contextTags.length > 1){
         var intersection;
-        contextTags.forEach(function(tag){
-            var contextTag = model.tagDict[tag];
+        contextTags.forEach(_.bind(function(tag){
+            var contextTag = this.tagInvertedIndex[tag];
             if(contextTag){
                 if(!intersection){
                     intersection = contextTag.adjacent;
@@ -143,45 +140,43 @@ collect.Model.prototype.relatedTags  = function(contextTags){
                     intersection = _.intersection(intersection, contextTag.adjacent);
                 }
             }
-        });
+        }, this));
         if(intersection){
-            intersection.forEach(function(adjacentNode){
-                payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+            intersection.forEach(_.bind(function(adjacentNode){
+                payload.list.push({name: adjacentNode, type: 'adjacent', count: this.tagInvertedIndex[adjacentNode].count});
                 payload.map[adjacentNode] = { type: 'adjacent' };
-            });
+            }, this));
         }
     }
     else {
-        contextTags.forEach(function(tag){
-            var contextTag = model.tagDict[tag];
+        contextTags.forEach(_.bind(function(tag){
+            var contextTag = this.tagInvertedIndex[tag];
             if(contextTag){
                 var adjacent = contextTag.adjacent;
-                adjacent.forEach(function(adjacentNode){
-                    payload.list.push({name: adjacentNode, type: 'adjacent', count: model.tagDict[adjacentNode].count});
+                adjacent.forEach(_.bind(function(adjacentNode){
+                    payload.list.push({name: adjacentNode, type: 'adjacent', count: this.tagInvertedIndex[adjacentNode].count});
                     payload.map[adjacentNode] = { type: 'adjacent' };
-                });
+                }, this));
             }
-        });
+        }, this));
     }
 
     return payload;
 }
 
 collect.Model.prototype.contextLinks  = function(contextTags){
-    //TODO - bind handlers, remove closure
-    var model = this;
     if(contextTags.length === 1 && contextTags[0] === 'all'){
-        return model.linkCollection.toJSON();
+        return this.linkCollection.toJSON();
     }
     else{ 
         var tagIndexes = [];
-        contextTags.forEach(function(tag, index, items){
-            var tag = model.tagDict[tag];
+        contextTags.forEach(_.bind(function(tag, index, items){
+            var tag = this.tagInvertedIndex[tag];
             if(tag){
                 var subList = tag.indexes;
                 tagIndexes.push(subList);
             }
-        });
+        }, this));
 
         var indexes;
         if(contextTags.length > 1){
@@ -193,10 +188,10 @@ collect.Model.prototype.contextLinks  = function(contextTags){
 
         if(indexes){
             var temp = [];
-            indexes.forEach(function(contextIndex, index, items){
-                var link = model.linkCollection.at(contextIndex);
+            indexes.forEach(_.bind(function(contextIndex, index, items){
+                var link = this.linkCollection.at(contextIndex);
                 temp.push(link.toJSON());
-            });
+            }, this));
             return temp;
         }
         else{
