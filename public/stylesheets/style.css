@@ -204,9 +204,6 @@ body.vis div#search {
   padding: 5px 8px;
   overflow: hidden;
 }
-#links section ul li div.note pre {
-  font-family: "Helvetica Neue";
-}
 #links section ul li div.note div.moreless {
   background-color: #e7e7f0;
   border-radius: 3px;
