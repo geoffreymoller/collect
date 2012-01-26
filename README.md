@@ -7,6 +7,7 @@ TODO
 ----------
 * Travis CI - http://about.travis-ci.org/docs/user/getting-started/
 * CouchDB changes feed ?
+* IDBWrapper - https://github.com/jensarps/IDBWrapper
 * Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Fix Extension Graphic Status Event issues
 * Edit/Delete links from web UI
