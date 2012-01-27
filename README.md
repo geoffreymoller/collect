@@ -1,6 +1,9 @@
 Collect
 =================
 Collect is a link aggregator with a local data store 
+
+[![Build Status](https://secure.travis-ci.org/geoffreymoller/collect.png?branch=master)](http://travis-ci.org/geoffreymoller/collect)
+
 http://collect.no.de
 
 TODO
