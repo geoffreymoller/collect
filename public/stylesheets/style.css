@@ -170,6 +170,7 @@ body.vis div#search {
   width: 700px;
 }
 #links section ul li a.delete {
+  display: none;
   position: absolute;
   right: 0;
   top: 0;
