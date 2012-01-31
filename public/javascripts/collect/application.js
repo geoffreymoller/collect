@@ -75,6 +75,7 @@ collect.Application = Backbone.Router.extend({
                     //TODO - bind individual links to models instead of hacking the data from the view layer,
                     //reconcile Model.prototype.delete;
                     var target = $(e.target);
+                    target.parent().fadeOut();
                     var href = target.attr('href');
                     var parts = href.split('/');
                     var id = parts[2];
