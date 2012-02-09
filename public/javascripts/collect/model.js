@@ -42,17 +42,7 @@ collect.Model.prototype.delete = function(id, rev){
 
 collect.Model.prototype.createLink = function(link, datumIndex, array){
 
-    var _link = new this.Link({
-        couchId: link.couchId,
-        couchRev: link.couchRev,
-        dateCreated: link.dateCreated,
-        uri: link.uri,
-        title: link.title,
-        tags: link.tags,
-        notes: link.notes,
-        deleted: link.deleted
-    });
-
+    var _link = new this.Link(link);
     this.linkCollection.add(_link);
 
     if(link.tags){
