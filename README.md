@@ -8,8 +8,8 @@ http://collect.no.de
 
 TODO
 ----------
-* Travis CI - http://about.travis-ci.org/docs/user/getting-started/
-* CouchDB changes feed ?
+* Search on title, contents
+* Write some tests
 * IDBWrapper - https://github.com/jensarps/IDBWrapper
 * Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Fix Extension Graphic Status Event issues
@@ -20,7 +20,6 @@ TODO
     * Delicious - http://delicious.com/help/api 
     * ?Evernote - http://www.evernote.com/about/developer/api/
     * ?Twitter - https://dev.twitter.com 
-* Add notes to Chrome extension & DB
 * "Hot Tags" Column?
 * Mobile Behaviors - Filter by tag, etc
 * Loading screen for Chrome extension
