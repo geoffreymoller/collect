@@ -48,6 +48,7 @@ var javascriptFiles = [
     , 'collect/utility.js'
     , 'collect/application.js'
     , 'collect/model.js'
+    , 'collect/index.js'
     , 'collect/db.js'
 ]
 

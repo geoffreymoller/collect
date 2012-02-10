@@ -4,7 +4,7 @@ collect.Model = function(appCallback){
 
     var dbCallback = _.bind(function(data){
         this.data = data;
-        this.tagInvertedIndex = {};
+        this.tagInvertedIndex = new collect.TagIndex(); 
         this.Context = Backbone.Model.extend();
         this.context = new this.Context();
         this.LinkCollection = Backbone.Collection.extend();
@@ -46,30 +46,8 @@ collect.Model.prototype.createLink = function(link, datumIndex, array){
     this.linkCollection.add(_link);
 
     if(link.tags){
-        this.createTagIndex(link.tags, datumIndex, this.tagInvertedIndex);
+        this.tagInvertedIndex.add(link.tags, datumIndex);
     }
-
-}
-
-collect.Model.prototype.createTagIndex = function(tags, datumIndex, tagInvertedIndex){
-
-    var delegate = function(tag, index){
-        
-        var context = [tag];
-        var adjacentTags = _.difference(tags, context);
-
-        if(!tagInvertedIndex[tag]){
-            tagInvertedIndex[tag] = {count: 1, indexes: [datumIndex], adjacent: adjacentTags}
-        }
-        else {
-            var tag = tagInvertedIndex[tag];
-            tag.count++;
-            tag.indexes.push(datumIndex);
-            tag.adjacent = _.unique(tag.adjacent.concat(adjacentTags));
-        }
-    }
-
-    tags.forEach(delegate);
 
 }
 
@@ -80,9 +58,9 @@ collect.Model.prototype.getMultipleAdjacency = function(){
 collect.Model.prototype.sortTags = function(){
 
     this.sortedTags = []
-    for(var tag in this.tagInvertedIndex){
-        this.tagInvertedIndex[tag].adjacent = this.tagInvertedIndex[tag].adjacent.sort();
-        this.sortedTags.push({name: tag, value: this.tagInvertedIndex[tag].count});
+    for(var tag in this.tagInvertedIndex.data){
+        this.tagInvertedIndex.data[tag].adjacent = this.tagInvertedIndex.data[tag].adjacent.sort();
+        this.sortedTags.push({name: tag, value: this.tagInvertedIndex.data[tag].count});
     }  
 
     this.sortedTags = this.sortedTags.sort(function(a, b) {
@@ -112,8 +90,8 @@ collect.Model.prototype.relatedTags  = function(contextTags){
         map: {}
     };
     contextTags.forEach(_.bind(function(context){
-        if(context && this.tagInvertedIndex[context]){
-            payload.list.push({name: context, type: 'active', count: this.tagInvertedIndex[context].count});
+        if(context && this.tagInvertedIndex.data[context]){
+            payload.list.push({name: context, type: 'active', count: this.tagInvertedIndex.data[context].count});
             payload.map[context] = { type: 'active' };
         }
     }, this));
@@ -121,7 +99,7 @@ collect.Model.prototype.relatedTags  = function(contextTags){
     if(contextTags.length > 1){
         var intersection;
         contextTags.forEach(_.bind(function(tag){
-            var contextTag = this.tagInvertedIndex[tag];
+            var contextTag = this.tagInvertedIndex.data[tag];
             if(contextTag){
                 if(!intersection){
                     intersection = contextTag.adjacent;
@@ -133,18 +111,18 @@ collect.Model.prototype.relatedTags  = function(contextTags){
         }, this));
         if(intersection){
             intersection.forEach(_.bind(function(adjacentNode){
-                payload.list.push({name: adjacentNode, type: 'adjacent', count: this.tagInvertedIndex[adjacentNode].count});
+                payload.list.push({name: adjacentNode, type: 'adjacent', count: this.tagInvertedIndex.data[adjacentNode].count});
                 payload.map[adjacentNode] = { type: 'adjacent' };
             }, this));
         }
     }
     else {
         contextTags.forEach(_.bind(function(tag){
-            var contextTag = this.tagInvertedIndex[tag];
+            var contextTag = this.tagInvertedIndex.data[tag];
             if(contextTag){
                 var adjacent = contextTag.adjacent;
                 adjacent.forEach(_.bind(function(adjacentNode){
-                    payload.list.push({name: adjacentNode, type: 'adjacent', count: this.tagInvertedIndex[adjacentNode].count});
+                    payload.list.push({name: adjacentNode, type: 'adjacent', count: this.tagInvertedIndex.data[adjacentNode].count});
                     payload.map[adjacentNode] = { type: 'adjacent' };
                 }, this));
             }
@@ -161,7 +139,7 @@ collect.Model.prototype.contextLinks  = function(contextTags){
     else{ 
         var tagIndexes = [];
         contextTags.forEach(_.bind(function(tag, index, items){
-            var tag = this.tagInvertedIndex[tag];
+            var tag = this.tagInvertedIndex.data[tag];
             if(tag){
                 var subList = tag.indexes;
                 tagIndexes.push(subList);
