@@ -1,12 +1,11 @@
-var should = require('should'),
-    http = require('http'),
-    server = require('../server');
+var f = require('foounit').globalize();
+var http = require('http');
 
 describe("API", function() {
 
   describe("Links", function() {
 
-    it('Should return links via CouchDB', function(done){
+    it('Should return links via CouchDB', function(){
 
       var options = {
         host: 'geoffreymoller.cloudant.com',
@@ -15,8 +14,7 @@ describe("API", function() {
       };
 
       http.get(options, function(res) {
-        res.statusCode.should.equal(200);
-        done();
+        expect(res.statusCode).to(be, 200);
       })
 
     });
@@ -24,3 +22,5 @@ describe("API", function() {
   });
 
 });
+
+f.run();
