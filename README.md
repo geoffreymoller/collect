@@ -9,9 +9,9 @@ http://collect.no.de
 TODO
 ----------
 * Search on title, contents
+* Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Write some tests
 * IDBWrapper - https://github.com/jensarps/IDBWrapper
-* Visual Search: http://documentcloud.github.com/visualsearch/demo.html
 * Fix Extension Graphic Status Event issues
 * Edit/Delete links from web UI
 * Edit/Delete tags from web UI

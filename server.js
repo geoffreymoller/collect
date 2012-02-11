@@ -27,6 +27,7 @@ var cssFiles = [
     'bootstrap.min.css'
     , 'pagination.css'
     , 'style.css'
+    , 'visualsearch-datauri.css'
 ]
 
 var javascriptFiles = [
@@ -34,11 +35,16 @@ var javascriptFiles = [
     , 'html4-defs.js'
     , 'html-sanitizer.js'
     , 'jquery-1.7.min.js'
+    , 'jquery.ui.core.js'
+    , 'jquery.ui.position.js'
+    , 'jquery.ui.widget.js'
+    , 'jquery.ui.autocomplete.js'
     , 'jquery.pagination.js'
     , 'underscore-min.js'
     , 'handlebars-1.0.0.beta.4.js'
     , 'backbone-min.js'
     , 'backbone.layoutmanager.js'
+    , 'visualsearch.js'
     , 'd3/d3.js'
     , 'd3/d3.layout.js'
     , 'collect/collect.js'
