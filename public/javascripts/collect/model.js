@@ -3,7 +3,9 @@
 collect.Model = function(appCallback){
 
     var dbCallback = _.bind(function(data){
+        collect.utility.time('Model::dbCallback');
         this.data = data;
+        this.titleIndex = new collect.Index();
         this.tagInvertedIndex = new collect.TagIndex(); 
         this.Context = Backbone.Model.extend();
         this.context = new this.Context();
@@ -15,6 +17,7 @@ collect.Model = function(appCallback){
         this.data.forEach(goog.bind(this.createLink, this));
         this.sortTags();
         appCallback();
+        collect.utility.timeEnd('Model::dbCallback');
     }, this);
 
     this.db = new collect.db(dbCallback);
@@ -41,14 +44,18 @@ collect.Model.prototype.delete = function(id, rev){
 }
 
 collect.Model.prototype.createLink = function(link, datumIndex, array){
-
     var _link = new this.Link(link);
     this.linkCollection.add(_link);
+    this.indexLink(link, datumIndex);
+}
 
+collect.Model.prototype.indexLink = function(link, datumIndex){
+    if(link.title){
+        this.titleIndex.add(link.title.toLowerCase().split(' '), datumIndex);
+    }
     if(link.tags){
         this.tagInvertedIndex.add(link.tags, datumIndex);
     }
-
 }
 
 collect.Model.prototype.getMultipleAdjacency = function(){
