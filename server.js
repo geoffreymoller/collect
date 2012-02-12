@@ -53,6 +53,7 @@ var javascriptFiles = [
     , 'collect/chart/bubble.js'
     , 'collect/utility.js'
     , 'collect/application.js'
+    , 'collect/search.js'
     , 'collect/model.js'
     , 'collect/index.js'
     , 'collect/db.js'

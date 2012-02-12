@@ -163,6 +163,8 @@ collect.Application = Backbone.Router.extend({
             this.navigate('tags/' + predicate, true);
         }, this));
 
+        var search = new collect.Search();
+
         collect.utility.timeEnd('TIME: Route: tag');
 
     },
@@ -186,6 +188,8 @@ collect.Application = Backbone.Router.extend({
             .addClass('vis')
         });  
 
+        var search = new collect.Search();
+
         switch(type){
             case 'bubble':
                 var chart = new BubbleChart();
@@ -193,7 +197,6 @@ collect.Application = Backbone.Router.extend({
                 collect.doc.bind('/chart/bubble/click', function(e, tag){
                     collect.app.navigate('tags/' + tag, true);
                 }); 
-            return false;
         }
 
         collect.utility.timeEnd('TIME: Route: vis');
