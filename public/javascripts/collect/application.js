@@ -141,7 +141,7 @@ collect.Application = Backbone.Router.extend({
             views: {
                 ".topbar": new this.views.TopbarView(),
                 "#links": new this.views.LinksView({model: {
-                    tags: model.sortedTags.filter(function(tag){
+                    tags: model.sortedTags.count.filter(function(tag){
                         return !!!relatedTags.map[tag.name];
                     }), 
                     relatedTags: relatedTags, 
@@ -191,7 +191,7 @@ collect.Application = Backbone.Router.extend({
         switch(type){
             case 'bubble':
                 var chart = new BubbleChart();
-                chart.render(collect.model.sortedTags);
+                chart.render(collect.model.sortedTags.count);
                 collect.doc.bind('/chart/bubble/click', function(e, tag){
                     collect.app.navigate('tags/' + tag, true);
                 }); 

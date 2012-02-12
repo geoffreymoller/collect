@@ -64,13 +64,18 @@ collect.Model.prototype.getMultipleAdjacency = function(){
 
 collect.Model.prototype.sortTags = function(){
 
-    this.sortedTags = []
+    this.sortedTags = {
+      count: [],
+      alpha: []
+    };
     for(var tag in this.tagInvertedIndex.data){
         this.tagInvertedIndex.data[tag].adjacent = this.tagInvertedIndex.data[tag].adjacent.sort();
-        this.sortedTags.push({name: tag, value: this.tagInvertedIndex.data[tag].count});
+        this.sortedTags.count.push({name: tag, value: this.tagInvertedIndex.data[tag].count});
+        this.sortedTags.alpha.push(tag);
     }  
 
-    this.sortedTags = this.sortedTags.sort(function(a, b) {
+    this.sortedTags.alpha = this.sortedTags.alpha.sort();
+    this.sortedTags.count = this.sortedTags.count.sort(function(a, b) {
         if(a.value < b.value){
             return -1;
         }

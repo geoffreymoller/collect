@@ -27,7 +27,7 @@ collect.Search = function(){
         valueMatches: function(facet, searchTerm, callback) {
           switch (facet) {
             case 'tag':
-              callback(['public', 'private', 'protected']);
+              callback(collect.model.sortedTags.alpha);
             break;
           }
         }
