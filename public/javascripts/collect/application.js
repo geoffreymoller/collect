@@ -118,7 +118,7 @@ collect.Application = Backbone.Router.extend({
     },
 
     root: function() {
-        this.navigate('tags/all', true);
+        this.navigate('search/tags=all', true);
     },
 
     search: function(query, page) {
@@ -131,7 +131,6 @@ collect.Application = Backbone.Router.extend({
         model.context.set({'context': contextTags});
         var relatedTags = model.relatedTags(contextTags);
         var contextLinks = model.contextLinks(contextTags); 
-        console.dir(contextLinks);
         contextLinks = contextLinks.filter(function(link){
             return !!!link.deleted;
         });

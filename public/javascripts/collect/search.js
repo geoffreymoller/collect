@@ -24,7 +24,7 @@ collect.Search = function(){
           if(!!!params.tag){
             params['tag'] = 'all';
           }
-          collect.app.navigate('tags/' + params['tag'], true);
+          collect.app.navigate('search/tags=' + params['tag'], true);
         },
 
         facetMatches: function(callback) {
