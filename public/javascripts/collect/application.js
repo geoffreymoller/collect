@@ -123,21 +123,15 @@ collect.Application = Backbone.Router.extend({
 
     search: function(query, page) {
 
-        var params = {};
-        _.each(query.split(';'), function(item){
-          var parts = item.split('=');
-          var category = parts[0];
-          var value = parts[1];
-          params[category] = value;
-        });
-
         collect.utility.time('TIME: Route: tag');
 
+        var params = collect.utility.parseQuery(query);
         var model = collect.model;
         var contextTags = params['tags'].split(',');
         model.context.set({'context': contextTags});
         var relatedTags = model.relatedTags(contextTags);
         var contextLinks = model.contextLinks(contextTags); 
+        console.dir(contextLinks);
         contextLinks = contextLinks.filter(function(link){
             return !!!link.deleted;
         });
