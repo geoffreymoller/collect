@@ -34,8 +34,8 @@ collect.Application = Backbone.Router.extend({
 
     routes: {
         "": "root",
-        "tags/:tags/:page": "tag",
-        "tags/:tags": "tag",
+        "search/:query": "search",
+        "search/:query/:page": "search",
         "vis/:type": "vis"
     },
 
@@ -121,14 +121,21 @@ collect.Application = Backbone.Router.extend({
         this.navigate('tags/all', true);
     },
 
-    tag: function(contextTags, page) {
+    search: function(query, page) {
+
+        var params = {};
+        _.each(query.split(';'), function(item){
+          var parts = item.split('=');
+          var category = parts[0];
+          var value = parts[1];
+          params[category] = value;
+        });
 
         collect.utility.time('TIME: Route: tag');
 
         var model = collect.model;
+        var contextTags = params['tags'].split(',');
         model.context.set({'context': contextTags});
-
-        var contextTags = contextTags.split('+');
         var relatedTags = model.relatedTags(contextTags);
         var contextLinks = model.contextLinks(contextTags); 
         contextLinks = contextLinks.filter(function(link){
@@ -146,7 +153,7 @@ collect.Application = Backbone.Router.extend({
                     }), 
                     relatedTags: relatedTags, 
                     links: contextLinks.slice(pagination.start, pagination.end), 
-                    contextTags: model.context.get('context').replace(/\+/g, ' AND ')  || 'all'}
+                    contextTags: model.context.get('context') || 'all'}
                 })
             }
         });
