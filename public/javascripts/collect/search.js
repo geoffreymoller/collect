@@ -1,10 +1,15 @@
 collect.Search = function(){
 
     collect.search = VS.init({
+
       container: $('#search'),
       query: '',
       callbacks: {
+
         search: function(query, searchCollection) {
+          if(query === '') {
+            return;
+          }
           var params = {};
           searchCollection.each(function(model){
             var category = model.get('category');
@@ -21,9 +26,11 @@ collect.Search = function(){
           }
           collect.app.navigate('tags/' + params['tag'], true);
         },
+
         facetMatches: function(callback) {
           callback([ 'tag' ]);
         },
+
         valueMatches: function(facet, searchTerm, callback) {
           switch (facet) {
             case 'tag':
@@ -31,6 +38,7 @@ collect.Search = function(){
             break;
           }
         }
+
       }
     });
 
