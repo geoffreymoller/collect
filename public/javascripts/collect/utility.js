@@ -22,6 +22,17 @@ collect.utility = {
         else {
             return str; 
         }
+    },
+
+    parseQuery: function(query){
+      var params = {};
+      _.each(query.split(';'), function(item){
+        var parts = item.split('=');
+        var category = parts[0];
+        var value = parts[1];
+        params[category] = value;
+      });
+      return params;
     }
 
 }
