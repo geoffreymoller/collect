@@ -60,7 +60,35 @@ collect.Application = Backbone.Router.extend({
             },
             events: {
                 "click .delete": "deleteHandler",
-                "click .moreless": "morelessHandler"
+                "click .moreless": "morelessHandler",
+                "click span.add": "addHandler",
+                "click span.subtract": "subtractHandler",
+                "click a[href*='/#tags'], span.add, span.subtract": "scrollHandler"
+            },
+            scrollHandler: function(){
+                $(document.body).scrollTop(0);
+            },
+            addHandler: function(e){
+              var tag = $(e.target).parent().attr('id').split('-')[1];
+              var _context = collect.model.context.get('context');
+              if(_context === 'all'){
+                  collect.app.navigate('tags/' + tag, true);
+              }
+              else{
+                  collect.app.navigate('tags/' + _context + '+' + tag, true);
+              }
+            },
+            subtractHandler: function(e){
+              var tag = $(e.target).parent().attr('id').split('-')[1];
+              var _context = collect.model.context.get('context').split('+');
+              _context = _.reject(_context, function(contextTag){ return contextTag === tag });
+              if(_context.length === 0){
+                  collect.app.navigate('', true);
+              }
+              else{
+                  _context = _context.join('+');
+                  collect.app.navigate('tags/' + _context, true);
+              }
             },
             morelessHandler: function(e){
               var target = $(e.target);
@@ -172,46 +200,18 @@ collect.Application = Backbone.Router.extend({
     },
 
     listen: function(){
-        //TODO - listeners to views
-        var app = this;
-        $(document).on('keypress', function(e){
+        $(document).on('keypress', _.bind(function(e){
             if(e.charCode === 47){
                 $('#search input').focus();
                 e.preventDefault();
             }
             if(e.charCode === 13 && e.target.id === 'searchText'){
                 var search = e.target.value;
-                app.navigate('tags/' + search, true);
+                this.navigate('tags/' + search, true);
                 $(e.target).select();
                 $(document.body).scrollTop(0)
             }
-        });
-        $(document).on('click', 'a[href*="/#tags"], span.add, span.subtract', function(e){
-            $(document.body).scrollTop(0);
-        });
-        $(document).on('click', 'span.add', function(e){
-            var tag = $(this).parent().attr('id').split('-')[1];
-            var _context = collect.model.context.get('context');
-            if(_context === 'all'){
-                app.navigate('tags/' + tag, true);
-            }
-            else{
-                app.navigate('tags/' + _context + '+' + tag, true);
-            }
-
-        });
-        $(document).on('click', 'span.subtract', function(e){
-            var tag = $(this).parent().attr('id').split('-')[1];
-            var _context = collect.model.context.get('context').split('+');
-            _context = _.reject(_context, function(contextTag){ return contextTag === tag });
-            if(_context.length === 0){
-                app.navigate('', true);
-            }
-            else{
-                _context = _context.join('+');
-                app.navigate('tags/' + _context, true);
-            }
-        });
+        }, this));
     }
 
 });
