@@ -14,6 +14,9 @@ body.vis {
 body.loaded {
   padding: 80px 0 0 0;
 }
+body.loaded div.topbar {
+  display: block;
+}
 body.loaded #loader {
   display: none;
 }
@@ -40,8 +43,12 @@ div#container {
   text-align: left;
   width: 940px;
 }
+div.topbar {
+  display: none;
+}
 div.topbar div.topbar-inner div.container div#search {
-  margin-top: 5px;
+  margin-top: 3px;
+  width: 400px;
 }
 div.topbar div.topbar-inner div.container a#visuals {
   height: 24px;
