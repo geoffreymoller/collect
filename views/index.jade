@@ -1,12 +1,13 @@
-div#wrapper 
+div#container
+  div#loader
+  div.topbar
+    !=partial('templates/topbar')
+  div#wrapper
 
 script(id="main-layout",type="layout")
-    div#container
-        div.topbar
-        div#vis.center
-        div#links
+    div#vis.center
+    div#links
 
-!=partial('templates/topbar')
 !=partial('templates/links')
 !=partial('templates/vis')
 

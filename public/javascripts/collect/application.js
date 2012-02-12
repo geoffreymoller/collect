@@ -4,6 +4,7 @@ collect.Application = Backbone.Router.extend({
 
     initialize: function(){
         this.listen();
+        var search = new collect.Search();
         Handlebars.registerHelper('date_string', function(milliseconds) {
           return collect.Model.formatDate(milliseconds);
         });
@@ -28,6 +29,7 @@ collect.Application = Backbone.Router.extend({
             return result; 
           }
         });
+        $('body').addClass('loaded');
     },
 
     routes: {
@@ -163,8 +165,6 @@ collect.Application = Backbone.Router.extend({
             this.navigate('tags/' + predicate, true);
         }, this));
 
-        var search = new collect.Search();
-
         collect.utility.timeEnd('TIME: Route: tag');
 
     },
@@ -187,8 +187,6 @@ collect.Application = Backbone.Router.extend({
             .removeClass('tags')
             .addClass('vis')
         });  
-
-        var search = new collect.Search();
 
         switch(type){
             case 'bubble':
