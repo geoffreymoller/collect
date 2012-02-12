@@ -16,6 +16,9 @@ collect.Search = function(){
               params[category] = value;
             }
           });
+          if(!!!params.tag){
+            params['tag'] = 'all';
+          }
           collect.app.navigate('tags/' + params['tag'], true);
         },
         facetMatches: function(callback) {
