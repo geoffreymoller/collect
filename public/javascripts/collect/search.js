@@ -1,11 +1,22 @@
 collect.Search = function(){
 
-    window.visualSearch = VS.init({
+    collect.search = VS.init({
       container: $('#search'),
       query: '',
       callbacks: {
         search: function(query, searchCollection) {
-          console.dir(query);
+          var params = {};
+          searchCollection.each(function(model){
+            var category = model.get('category');
+            var value = model.get('value');
+            if(params[category]){
+              params[category] = params[category] + '+' + value;
+            }
+            else {
+              params[category] = value;
+            }
+          });
+          collect.app.navigate('tags/' + params['tag'], true);
         },
         facetMatches: function(callback) {
           callback([ 'tag' ]);
