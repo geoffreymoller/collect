@@ -3,7 +3,7 @@ html(manifest=manifest)
   head
     title= title
     - if(env === 'prod')
-      link(rel="stylesheet", href="/stylesheets/collect_all.css")
+      link(rel="stylesheet", href="/stylesheets/collect_all.css?#{static.cssHash}")
     - else
       - each file in static.cssFiles
         link(rel="stylesheet", href="/stylesheets/#{file}")
@@ -11,7 +11,7 @@ html(manifest=manifest)
   body!= body
 
   - if(env === 'prod')
-    script(src='javascripts/collect_all.js')
+    script(src='javascripts/collect_all.js?#{static.javascriptHash}')
   - else
     - each file in static.javascriptFiles
       script(src='javascripts/#{file}')
