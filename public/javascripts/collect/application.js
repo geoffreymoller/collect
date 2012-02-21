@@ -162,7 +162,7 @@ collect.Application = Backbone.Router.extend({
             var index = parseInt(index);
             index++;
             var predicate = contextTags.join(',') + '/' + index;
-            this.navigate('tags/' + predicate, true);
+            this.navigate('search/tags=' + predicate, true);
         }, this));
 
         collect.utility.timeEnd('TIME: Route: tag');
