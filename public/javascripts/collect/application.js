@@ -52,6 +52,12 @@ collect.Application = Backbone.Router.extend({
             template: "#vis-template",
             render: function(layout) {
                 return layout(this).render();
+            },
+            events: {
+                "change #tagThreshold": "thresholdHandler"
+            },
+            thresholdHandler: function(e){
+              collect.doc.trigger('/chart/bubble/threshold', $(e.target).val());
             }
         }),
 
@@ -190,8 +196,7 @@ collect.Application = Backbone.Router.extend({
 
         switch(type){
             case 'bubble':
-                var chart = new BubbleChart();
-                chart.render(collect.model.sortedTags.count);
+                var chart = new BubbleChart(collect.model.sortedTags.count, $('#tagThreshold').val());
                 collect.doc.bind('/chart/bubble/click', function(e, tag){
                     collect.app.navigate('search/tags=' + tag, true);
                 }); 

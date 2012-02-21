@@ -1,10 +1,36 @@
 ;"use strict";
 
-function BubbleChart(){ }
+function BubbleChart(data, threshold){
 
-BubbleChart.prototype.render = function(data){
+  var threshold;
+
+  this.__defineGetter__('threshold', function(prop) {
+    return threshold;
+  });
+
+  this.__defineSetter__('threshold', function(prop) {
+    threshold = prop;
+    this.render();
+  });
+
+  this.data = data;
+  this.$node = $('#chart');
+
+  this.threshold = threshold || BubbleChart.DEFAULT_THRESHOLD;
+
+  collect.doc.bind('/chart/bubble/threshold', _.bind(function(e, val){
+    this.threshold = val;
+  }, this));
+
+}
+
+BubbleChart.DEFAULT_THRESHOLD = 2;
+
+BubbleChart.prototype.render = function(){
 
     collect.utility.time('TIME: BubbleChart::render');
+
+    this.$node.empty();
 
     var r = 760,
         format = d3.format(",d"),
@@ -14,16 +40,16 @@ BubbleChart.prototype.render = function(data){
         .sort(null)
         .size([r, r]);
 
-    var vis = d3.select("#chart").append("svg:svg")
+    var vis = d3.select('#' + this.$node.attr('id')).append("svg:svg")
         .attr("width", r)
         .attr("height", r)
         .attr("class", "bubble");
 
-    data = { children: data };
+    var data = { children: this.data };
 
     var node = vis.selectAll("g.node")
         .data(bubble.nodes(data)
-        .filter(function(d) { return !d.children && d.value >= 2; }))
+        .filter(_.bind(function(d) { return !d.children && d.value >= this.threshold; }, this)))
         .enter().append("svg:g")
         .attr("class", "node")
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });

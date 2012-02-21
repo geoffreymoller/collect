@@ -1,6 +1,11 @@
 script(id="vis-template",type="template")
-    ul.tabs
-      li.active
-        a(href="#vis/bubble") Bubble
-    div#chart
+  div.controls
+    label Minimim Tag Count Threshold
+    select(id="tagThreshold")
+      option(value=1) 1
+      option(value=2) 2
+      option(value=5, selected="selected") 5
+      option(value=10) 10
+      option(value=20) 20
+  div#chart
 

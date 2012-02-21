@@ -8,12 +8,6 @@ body{
     }
 }
 
-#loader {
-  height: 22px;
-  width: 126px;
-}
-
-
 body.loaded {
     padding: 80px 0 0 0;
     div.topbar {
@@ -81,6 +75,28 @@ div.topbar {
         top:40px;
         width: 940px;
         z-index: 2;
+    }
+
+    div.controls {
+      label {
+        display: inline-block;
+        margin-right: 10px;
+        width: auto; 
+      }
+    }
+
+    //Chart::Bubble
+    svg g {
+        cursor: pointer;
+    }
+
+    circle {
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+
+    text {
+        font: 10px sans-serif;
     }
 
 }
@@ -304,20 +320,6 @@ body.vis{
     }
 
 } /* /#links */
-
-//Chart::Bubble
-svg g {
-    cursor: pointer;
-}
-
-circle {
-    stroke: #fff;
-    stroke-width: 1.5px;
-}
-
-text {
-    font: 10px sans-serif;
-}
 
 /* base64 Image Data */
 .moreless div {
