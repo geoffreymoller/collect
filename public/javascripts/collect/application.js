@@ -193,7 +193,7 @@ collect.Application = Backbone.Router.extend({
                 var chart = new BubbleChart();
                 chart.render(collect.model.sortedTags.count);
                 collect.doc.bind('/chart/bubble/click', function(e, tag){
-                    collect.app.navigate('tags/' + tag, true);
+                    collect.app.navigate('search/tags=' + tag, true);
                 }); 
         }
 
