@@ -80,22 +80,22 @@ collect.Application = Backbone.Router.extend({
               var tag = $(e.target).parent().attr('id').split('-')[1];
               var _context = collect.model.context.get('context');
               if(_context === 'all'){
-                  collect.app.navigate('tags/' + tag, true);
+                  collect.app.navigate('search/tags=' + tag, true);
               }
               else{
-                  collect.app.navigate('tags/' + _context + '+' + tag, true);
+                  collect.app.navigate('search/tags=' + _context + ',' + tag, true);
               }
             },
             subtractHandler: function(e){
               var tag = $(e.target).parent().attr('id').split('-')[1];
-              var _context = collect.model.context.get('context').split('+');
+              var _context = collect.model.context.get('context');
               _context = _.reject(_context, function(contextTag){ return contextTag === tag });
               if(_context.length === 0){
                   collect.app.navigate('', true);
               }
               else{
                   _context = _context.join('+');
-                  collect.app.navigate('tags/' + _context, true);
+                  collect.app.navigate('search/tags=' + _context, true);
               }
             },
             morelessHandler: function(e){
