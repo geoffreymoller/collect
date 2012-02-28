@@ -49,6 +49,7 @@ var javascriptFiles = [
     , 'd3/d3.layout.js'
     , 'collect/collect.js'
     , 'collect/applicationCache.js'
+    , 'collect/loader.js'
     , 'collect/pagination.js'
     , 'collect/chart/bubble.js'
     , 'collect/utility.js'

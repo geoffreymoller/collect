@@ -86,6 +86,7 @@ collect.db.prototype.getPath = function(){
         path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
     }
     else{
+        collect.doc.trigger('/loader/status', 'Building database from scratch...');
         path += 'uri?descending=true&callback=?';
     }
     return path;
@@ -161,6 +162,8 @@ collect.db.prototype.addLink = function(store, link, callback) {
 };
 
 collect.db.prototype.getAllLinks = function(callback) {
+
+  collect.doc.trigger('/loader/status', 'Retrieving all links from database...');
 
   var that = this;
   var db = this.db;
