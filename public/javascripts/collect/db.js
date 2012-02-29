@@ -86,7 +86,7 @@ collect.db.prototype.getPath = function(){
         path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
     }
     else{
-        collect.doc.trigger('/loader/status', 'Building database from scratch...');
+        collect.doc.trigger('/loader/status', 'Initializing database...');
         path += 'uri?descending=true&callback=?';
     }
     return path;
