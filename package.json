@@ -7,6 +7,7 @@
     , "connect-gzip": "0.1.5"
     , "less": ">= 0.0.1"
     , "jade": ">= 0.0.1"
+    , "request": ">= 2.9.150"
     , "node-uuid": ">= 1.2.0"
     , "cradle": ">= 0.5.7"
     , "connect-assetmanager": ">= 0.0.24"
