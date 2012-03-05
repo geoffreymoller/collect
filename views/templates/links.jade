@@ -38,7 +38,7 @@ script(id="links-template",type="template")
                     <li>
                     <a class="delete" href="/#delete/{{this.couchId}}/{{this.couchRev}}">delete</a>
                     <a target="_blank" class="title" href="{{this.uri}}">{{truncate title 100}}</a>
-                    <div class="date">{{date_string dateCreated}}</div>
+                    <div class="date">{{date_string date_created}}</div>
                     <div><a target="_blank" class="uri" href="{{this.uri}}">{{truncate uri 100}}</a></div>
                     <div class="tags">
                     {{#each tags}}
