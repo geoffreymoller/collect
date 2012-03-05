@@ -12,7 +12,6 @@ collect.Model = function(appCallback){
         this.LinkCollection = Backbone.Collection.extend();
         this.linkCollection = new this.LinkCollection();
         this.linkCollection.bind('remove', goog.bind(this.removeLinkHandler, this));
-        this.Link = Backbone.Model.extend();
         this.Tag = Backbone.Model.extend();
         this.data.forEach(goog.bind(this.createLink, this));
         this.sortTags();
@@ -44,9 +43,10 @@ collect.Model.prototype.delete = function(id, rev){
 }
 
 collect.Model.prototype.createLink = function(link, datumIndex, array){
-    var _link = new this.Link(link);
+    //TODO - can we improve this?
+    var _link = link.value ? new collect.Link(link) : link;
     this.linkCollection.add(_link);
-    this.indexLink(link, datumIndex);
+    this.indexLink(_link, datumIndex);
 }
 
 collect.Model.prototype.indexLink = function(link, datumIndex){
@@ -145,6 +145,7 @@ collect.Model.prototype.relatedTags  = function(contextTags){
 }
 
 collect.Model.prototype.contextLinks  = function(contextTags){
+
     if(contextTags.length === 1 && contextTags[0] === 'all'){
         return this.linkCollection.toJSON();
     }

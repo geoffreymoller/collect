@@ -56,6 +56,7 @@ var javascriptFiles = [
     , 'collect/application.js'
     , 'collect/search.js'
     , 'collect/model.js'
+    , 'collect/model/link.js'
     , 'collect/index.js'
     , 'collect/db.js'
 ]

@@ -1,6 +1,6 @@
 ;"use strict";
 
-var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || false;
 
 if ('webkitIndexedDB' in window) {
   window.IDBTransaction = window.webkitIDBTransaction;
@@ -17,11 +17,39 @@ collect.db = function(modelCallback){
 
   this.__defineSetter__('lastUpdated', function(prop) {
     localStorage['lastUpdated'] = prop;
-  });
+  })
 
-  this.open();
+  if(indexedDB){
+    this.open();
+  }
+  else {
+    var successCallback = _.bind(function(data){
+      this.modelCallback(data.rows);
+    }, this);
+    this.getLinks(successCallback);
+  }
 
 }
+
+collect.db.prototype.getLinks = function(successCallback){
+  var path = this.getPath();
+  var links = $.getJSON(path);
+  links.success(successCallback);
+}
+
+collect.db.prototype.getPath = function(){
+    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
+    var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
+    if(indexedDB && this.lastUpdated){
+        path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
+    }
+    else{
+        collect.doc.trigger('/loader/status', 'Initializing database...');
+        path += 'uri?descending=true&callback=?';
+    }
+    return path;
+}
+
 
 collect.db.prototype.open = function() {
 
@@ -53,43 +81,27 @@ collect.db.prototype.open = function() {
   };
 
   request.onerror = this.onerror;
-
 }
-
-
 
 collect.db.prototype.main = function(){
 
-    collect.doc.bind('/db/links/add/done /db/links/nonew', _.bind(function(){
-        this.getAllLinks(_.bind(function(links){
-            this.modelCallback(links);
-        }, this));
-    }, this)) 
-
-    var path = this.getPath();
-    var links = $.getJSON(path);
-    links.success(_.bind(function(data){
-        if(data.rows.length){
-            this.addLinks(data);
-        }
-        else {
-            collect.doc.trigger('/db/links/nonew');
-        }
+  collect.doc.bind('/db/links/add/done /db/links/nonew', _.bind(function(){
+    this.getAllLinks(_.bind(function(links){
+      this.modelCallback(links);
     }, this));
+  }, this))
 
-}
+  var successCallback = _.bind(function(data){
+      if(data.rows.length){
+          this.addLinks(data);
+      }
+      else {
+          collect.doc.trigger('/db/links/nonew');
+      }
+  }, this);
 
-collect.db.prototype.getPath = function(){
-    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-    var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
-    if(this.lastUpdated){
-        path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
-    }
-    else{
-        collect.doc.trigger('/loader/status', 'Initializing database...');
-        path += 'uri?descending=true&callback=?';
-    }
-    return path;
+  this.getLinks(successCallback);
+
 }
 
 collect.db.prototype.onerror = function(e) {
@@ -137,23 +149,9 @@ collect.db.prototype.delete = function(id) {
 
 
 collect.db.prototype.addLink = function(store, link, callback) {
-
   var that = this;
-  var data = {
-    "couchId": link.id,
-    "couchRev": link.value.rev,
-    "title": link.value.title,
-    "uri": link.value.uri,
-    "tags": link.value.tags ? link.value.tags.sort() : [] ,
-    "notes": link.value.notes,
-    "dateCreated": link.value.date_created,
-    //TODO - replace dateCreatedDesc with keyrange / descending query
-    "dateCreatedDesc": 10000000000000000 - link.value.date_created,
-    "dateModified": link.value.date_modified,
-    "deleted": link.value.deleted
-  };
-
-  var request = store.put(data);
+  var link = new collect.Link(link);
+  var request = store.put(link);
   request.onsuccess = function(e) { };
   request.onerror = function(e) {
     console.log("Error Adding Link: ", e);
