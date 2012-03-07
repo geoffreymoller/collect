@@ -15,6 +15,6 @@
     , "should": ">= 0.5.1"
   }
   , "scripts": {
-    "test": "node test/server-test.js;"
+    "test": "node tests/server-test.js;"
   }
 }
