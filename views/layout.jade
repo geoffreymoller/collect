@@ -18,6 +18,11 @@ html(manifest=manifest)
 
   script
       collect.server = { time: #{serverTime} }
+      collect.options = {
+        db: '#{options.db}',
+        username: '#{options.username}',
+        password: '#{options.password}'
+      }
 
   script
       var _gaq = _gaq || [];

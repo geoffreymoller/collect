@@ -38,8 +38,15 @@ collect.db.prototype.getLinks = function(successCallback){
 }
 
 collect.db.prototype.getPath = function(){
+
     var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
-    var path = 'https://' + auth + '@geoffreymoller.cloudant.com/collect/_design/uri/_view/';
+    var db = 'collect';
+    if(collect.options.db){
+      auth = collect.options.username + ':' + collect.options.password;
+      db = 'collect-qa';
+    }
+
+    var path = 'https://' + auth + '@geoffreymoller.cloudant.com/' + db + '/_design/uri/_view/';
     if(indexedDB && this.lastUpdated){
         path += 'uri?descending=true&endkey="' + this.lastUpdated + '"&callback=?';
     }
