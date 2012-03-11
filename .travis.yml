@@ -7,4 +7,4 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - "sudo node tests/harness.js  --db=collect-qa --username=ofterviiiiiicurandumakin --password=SQdLU63t2OKAxJSy0UEiNXKT &"
 script:
-  - "DISPLAY=:99.0; ./bin/casperjs tests/collectcasper.js"
+  - "sudo node tests/server-test.js; DISPLAY=:99.0; ./bin/casperjs tests/collectcasper.js"
