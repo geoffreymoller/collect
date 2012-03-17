@@ -1,6 +1,6 @@
 ;"use strict";
 
-var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || false;
+var indexedDB = window.indexedDB || window.webkitIndexedDB || false;
 
 if ('webkitIndexedDB' in window) {
   window.IDBTransaction = window.webkitIDBTransaction;
