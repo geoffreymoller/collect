@@ -108,24 +108,29 @@ module.exports = function(options){
   app.get('/', function(req, res){
 
       var agent = req.headers['user-agent'];
-      var isMobile =!!(agent.match(/(iPhone|iPod|blackberry|android 0.5|htc|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
-      if(isMobile){
-          res.redirect('http://geoffreymoller.no.de/');
+      if(agent.indexOf('MSIE') !== -1){
+        res.redirect('https://www.google.com/chrome');
       }
       else {
-          res.render('index', {
-            title: 'Collect',
-            serverTime: (new Date()).getTime(),
-            env: env,
-            manifest: manifest,
-            options: options && options.db ? options : { db: '', username: '', password: '' } ,
-            static: {
-                javascriptFiles: javascriptFiles,
-                javascriptHash: assetsManagerMiddleware.cacheHashes['js'],
-                cssFiles: cssFiles,
-                cssHash: assetsManagerMiddleware.cacheHashes['css']
-            }
-          });
+        var isMobile =!!(agent.match(/(iPhone|iPod|blackberry|android 0.5|htc|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
+        if(isMobile){
+            res.redirect('http://geoffreymoller.no.de/');
+        }
+        else {
+            res.render('index', {
+              title: 'Collect',
+              serverTime: (new Date()).getTime(),
+              env: env,
+              manifest: manifest,
+              options: options && options.db ? options : { db: '', username: '', password: '' } ,
+              static: {
+                  javascriptFiles: javascriptFiles,
+                  javascriptHash: assetsManagerMiddleware.cacheHashes['js'],
+                  cssFiles: cssFiles,
+                  cssHash: assetsManagerMiddleware.cacheHashes['css']
+              }
+            });
+        }
       }
 
   });
