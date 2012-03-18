@@ -71,7 +71,7 @@ collect.Application = Backbone.Router.extend({
                 "click .moreless": "morelessHandler",
                 "click span.add": "addHandler",
                 "click span.subtract": "subtractHandler",
-                "click a[href*='/#tags'], span.add, span.subtract": "scrollHandler"
+                "click a[href*='/#search/tags'], span.add, span.subtract": "scrollHandler"
             },
             scrollHandler: function(){
                 $(document.body).scrollTop(0);
