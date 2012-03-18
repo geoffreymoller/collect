@@ -151,7 +151,7 @@ collect.Application = Backbone.Router.extend({
                         return !!!relatedTags.map[tag.name];
                     }), 
                     relatedTags: relatedTags, 
-                    links: contextLinks.slice(pagination.start, pagination.end), 
+                    links: contextLinks.slice(pagination.start, pagination.end + 1),
                     contextTags: model.context.get('context') || 'all'}
                 })
             }

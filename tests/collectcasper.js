@@ -13,10 +13,9 @@ casper.start('http://localhost:3000', function(self){
 
 var payload;
 casper.then(function(self){
-  this.click('div.pagination a');
-  t.assertEquals('foo', 'foo', 'foo == foo');
-  t.assert('foo' !== 'bar', 'foo !== bar');
-  t.assertType('foo', 'string', 'foo is a string');
+  this.test.assertEval(function() {
+    return document.querySelectorAll('div.links ul li').length === collect.PAGE_LENGTH;
+  }, 'Page has correct number of links');
 });
 
 casper.run();
