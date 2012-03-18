@@ -32,4 +32,4 @@ collect.pagination = function(page){
 
 }
 
-collect.PAGE_LENGTH = 5;
+collect.PAGE_LENGTH = 7;
