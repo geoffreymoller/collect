@@ -17,11 +17,12 @@ html(manifest=manifest)
       script(src='javascripts/#{file}')
 
   script
-      collect.server = { time: #{serverTime} }
+      collect.server = { time: #{serverTime} };
       collect.options = {
         db: '#{options.db}',
         username: '#{options.username}',
-        password: '#{options.password}'
+        password: '#{options.password}',
+        PAGE_LENGTH: #{pageLength},
       }
 
   script

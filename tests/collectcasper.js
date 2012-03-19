@@ -4,6 +4,7 @@ var casper = require('casper').create({
 });
 
 var links = require('./tests/data').testData;
+var config = require('./conf').configuration;
 
 var t = casper.test;
 
@@ -16,26 +17,25 @@ casper.start('http://localhost:3000', function(self){
 var payload;
 casper.then(function(self){
 
+  this.test.assert(/^\d+$/.test(config.PAGE_LENGTH), 'Configuration PAGE_LENGTH is set and is an integer');
+
   this.test.assertEval(function() {
     var links = document.querySelectorAll('div.links ul li');
-    if(collect.model.data.length > collect.PAGE_LENGTH){
-      return links.length === collect.PAGE_LENGTH;
+    if(collect.model.data.length > collect.options.PAGE_LENGTH){
+      return links.length === collect.options.PAGE_LENGTH;
     }
     else {
       return links.length === collect.model.data.length;
     }
   }, 'Page has correct number of links');
 
-  this.test.assertEval(function() {
-    var links = document.querySelectorAll('div.links ul li');
-    if(links.length > collect.PAGE_LENGTH){
+  if(links.length > config.PAGE_LENGTH){
+    this.test.assertEval(function() {
+      var links = document.querySelectorAll('div.links ul li');
       var pagination = document.querySelectorAll('div.pagination div.pagination')[0];
-      return pagination.childNodes.length === 2 + Math.ceil(collect.model.data.length / collect.PAGE_LENGTH);
-    }
-    else {
-      return true;
-    }
-  }, 'Pagination has correct number of elements');
+      return pagination.childNodes.length === 2 + Math.ceil(collect.model.data.length / collect.options.PAGE_LENGTH);
+    }, 'Pagination has correct number of elements');
+  }
 
 });
 

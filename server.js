@@ -7,6 +7,7 @@ module.exports = function(options){
    */
 
   var
+    conf = require('./conf').configuration,
     express = require('express'),
     path = require('path'),
     fs = require('fs'),
@@ -18,7 +19,7 @@ module.exports = function(options){
         auth: { username: process.env.DB_API_KEY, password: process.env.DB_API_SECRET }
     });
     var db = connection.database('collect');
-    uuid = require('node-uuid');
+    var uuid = require('node-uuid');
 
   var app = module.exports = express.createServer(
       gzip.gzip({ flags: '--best' })
@@ -118,6 +119,7 @@ module.exports = function(options){
         }
         else {
             res.render('index', {
+              pageLength: conf.PAGE_LENGTH,
               title: 'Collect',
               serverTime: (new Date()).getTime(),
               env: env,
