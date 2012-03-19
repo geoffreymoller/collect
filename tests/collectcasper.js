@@ -17,12 +17,24 @@ var payload;
 casper.then(function(self){
 
   this.test.assertEval(function() {
-    return document.querySelectorAll('div.links ul li').length === collect.PAGE_LENGTH;
+    var links = document.querySelectorAll('div.links ul li');
+    if(collect.model.data.length > collect.PAGE_LENGTH){
+      return links.length === collect.PAGE_LENGTH;
+    }
+    else {
+      return links.length === collect.model.data.length;
+    }
   }, 'Page has correct number of links');
 
   this.test.assertEval(function() {
-    var pagination = document.querySelectorAll('div.pagination div.pagination')[0];
-    return pagination.childNodes.length === 2 + Math.ceil(collect.model.data.length / collect.PAGE_LENGTH);
+    var links = document.querySelectorAll('div.links ul li');
+    if(links.length > collect.PAGE_LENGTH){
+      var pagination = document.querySelectorAll('div.pagination div.pagination')[0];
+      return pagination.childNodes.length === 2 + Math.ceil(collect.model.data.length / collect.PAGE_LENGTH);
+    }
+    else {
+      return true;
+    }
   }, 'Pagination has correct number of elements');
 
 });
