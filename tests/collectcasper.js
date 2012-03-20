@@ -30,11 +30,22 @@ casper.then(function(self){
   }, 'Page has correct number of links');
 
   if(links.length > config.PAGE_LENGTH){
+
     this.test.assertEval(function() {
       var links = document.querySelectorAll('div.links ul li');
       var pagination = document.querySelectorAll('div.pagination div.pagination')[0];
       return pagination.childNodes.length === 2 + Math.ceil(collect.model.data.length / collect.options.PAGE_LENGTH);
     }, 'Pagination has correct number of elements');
+
+    this.test.assertEval(function() {
+      var pagination = document.querySelectorAll('div.pagination div.pagination')[0];
+      var children = pagination.childNodes;
+      var isValidPagination = children[0].className === 'current prev' &&
+      children[1].className === 'current' &&
+      children[children.length - 1].className === 'next';
+      return isValidPagination;
+    }, 'Pagination has correct CSS styles');
+
   }
 
 });
