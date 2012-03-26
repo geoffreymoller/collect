@@ -119,7 +119,7 @@ module.exports = function(options){
         }
         else {
             res.render('index', {
-              pageLength: conf.PAGE_LENGTH,
+              pageLength: argv.pageLength || conf.PAGE_LENGTH,
               title: 'Collect',
               serverTime: (new Date()).getTime(),
               env: env,

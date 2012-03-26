@@ -5,6 +5,6 @@ before_script:
   - "export PHANTOMJS_EXECUTABLE='phantomjs --local-to-remote-url-access=yes --ignore-ssl-errors=yes'"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - "sudo node tests/harness.js  --db=collect-qa --username=ofterviiiiiicurandumakin --password=SQdLU63t2OKAxJSy0UEiNXKT &"
+  - "sudo node tests/harness.js  --db=collect-qa --username=ofterviiiiiicurandumakin --password=SQdLU63t2OKAxJSy0UEiNXKT --pageLength=2 &"
 script:
   - "sudo node tests/server-test.js; DISPLAY=:99.0; ./bin/casperjs tests/collectcasper.js"
