@@ -12,6 +12,7 @@ var testData = [
       "URI": "http://www.jasondavies.com/9patch/",
       "date": 1326571354762,
       "tags": [
+        "javascript",
         "d3",
         "visualization"
       ]
@@ -21,17 +22,7 @@ var testData = [
       "URI": "http://www.jasondavies.com/9patch/",
       "date": 1326571354762,
       "tags": [
-        "foo",
-        "bar"
-      ]
-    },
-    {
-      "title": "9-Patch Quilt Generator - Jason Davies",
-      "URI": "http://www.jasondavies.com/9patch/",
-      "date": 1326571354762,
-      "tags": [
-        "code",
-        "2011"
+        "javascript"
       ]
     },
     {
