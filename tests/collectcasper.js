@@ -8,18 +8,6 @@ var __ = require('./tests/underscore-min')
 var links = require('./tests/data').testData;
 var config = require('./conf').configuration;
 
-var tagDict = {};
-__.each(links, function(link){
-  __.each(link.tags, function(tag){
-    if(tagDict[tag]){
-      tagDict[tag]++;
-    }
-    else {
-      tagDict[tag] = 1;
-    }
-  });
-});
-
 var t = casper.test;
 
 function noop(){};
@@ -28,18 +16,17 @@ casper.start('http://localhost:3000', function(self){
   this.waitForSelector('div#links div.links', noop, noop, 500000);
 });
 
-casper.thenEvaluate(function(term) {
-  $('body').attr('length.js', term);
-}, { term: tagDict.javascript });
-
 var payload;
 casper.then(function(self){
 
   this.test.assert(/^\d+$/.test(config.PAGE_LENGTH), 'Configuration PAGE_LENGTH is set and is an integer');
 
   this.test.assertEval(function() {
-    return $('#tag-javascript span.count').html() === $('body').attr('length.js');
-  }, 'Javascript tag has correct count');
+    return +$('#tag-javascript span.count').html() === 4
+      && +$('#tag-d3 span.count').html() === 1
+      && +$('#tag-visualization span.count').html() === 1
+      && +$('#tag-java span.count').html() === 1
+  }, 'Tags have correct count');
 
   this.test.assertEval(function() {
     var links = $('div.links ul li');
