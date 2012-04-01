@@ -22,11 +22,14 @@ casper.then(function(self){
   this.test.assert(/^\d+$/.test(config.PAGE_LENGTH), 'Configuration PAGE_LENGTH is set and is an integer');
 
   this.test.assertEval(function() {
-    return +$('#tag-javascript span.count').html() === 4
+    return +$('#tag-javascript span.count').html() === 3
       && +$('#tag-d3 span.count').html() === 1
       && +$('#tag-visualization span.count').html() === 1
       && +$('#tag-java span.count').html() === 1
   }, 'Tags have correct count');
+
+  casper.click('#tag-javascript a');
+
 
   this.test.assertEval(function() {
     var links = $('div.links ul li');

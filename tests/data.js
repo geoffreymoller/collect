@@ -30,8 +30,7 @@ var testData = [
       "URI": "http://www.jasondavies.com/9patch/",
       "date": 1326571354762,
       "tags": [
-        "java",
-        "javascript"
+        "java"
       ]
     }
 ]
