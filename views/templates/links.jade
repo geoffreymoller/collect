@@ -37,6 +37,8 @@ script(id="links-template",type="template")
                     {{#each links}}
                     <li>
                     <a class="delete" href="/#delete/{{this.couchId}}/{{this.couchRev}}">delete</a>
+                    {{#if_is_image this.uri }}
+                    {{/if_is_image}}
                     <a target="_blank" class="title" href="{{this.uri}}">{{truncate title 100}}</a>
                     <div class="date">{{date_string date_created}}</div>
                     <div><a target="_blank" class="uri" href="{{this.uri}}">{{truncate uri 100}}</a></div>
