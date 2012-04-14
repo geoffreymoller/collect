@@ -14,9 +14,17 @@ module.exports = function(options){
     gzip = require('connect-gzip'),
     sys = require('util'),
     cradle = require('cradle'),
+    request = require('request'),
+    knox = require('knox'),
+    q = require('q'),
     assetManager = require('connect-assetmanager'),
     connection = new(cradle.Connection)('https://geoffreymoller.cloudant.com', 443, {
         auth: { username: process.env.DB_API_KEY, password: process.env.DB_API_SECRET }
+    });
+    var client = knox.createClient({
+      key: process.env.AMAZON_KEY
+      , secret:  process.env.AMAZON_SECRET
+      , bucket: 'geoffreymoller-collect'
     });
     var db = connection.database('collect');
     var uuid = require('node-uuid');
@@ -154,24 +162,73 @@ module.exports = function(options){
   app.post('/save', function(req, res){
 
       var body = req.body;
-      var payload = {
-          title: body.title, 
-          URI: body.uri,
-          notes: body.notes,
-          date: new Date().getTime()
+      var uri = body.uri;
+      var isImage = /(\.jpg|\.jpeg|\.gif|\.png)$/.test(uri)
+
+      if(!isImage){
+        _save(uri);
+      }
+      else {
+        var deferred = upload_image(uri);
+        deferred.then(function(s3Url){
+          _save(s3Url);
+        }, function(res){
+          console.log('S3 Error: ' + res.statusCode);
+          throw new Error('S3 Error: ' + res.statusCode);
+        });
       }
 
-      var tags = body.tags;
-      if(tags){
-          tags = tags.split(',');
-          payload.tags = tags;
-      }
+      function _save(path){
+        var payload = {
+            title: body.title,
+            URI: path,
+            notes: body.notes,
+            date: new Date().getTime()
+        }
 
-      var id = uuid()
-      var callback = getCallback('Document Saved!', res);
-      db.save(id, payload, callback);
+        var tags = body.tags;
+        if(tags){
+            tags = tags.split(',');
+            payload.tags = tags;
+        }
+
+        var id = uuid()
+        var callback = getCallback('Document Saved!', res);
+        db.save(id, payload, callback);
+      }
 
   });
+
+  function upload_image(path){
+
+    var deferred = q.defer();
+
+    request(path, {encoding: null}, function(err, res, body) {
+
+      if(!err && res.statusCode == 200) {
+        var filename = '/' + res.request.path;
+        var req = client.put(filename, {
+          'Content-Type': res.headers['content-type'],
+          'Content-Length': res.headers['content-length']
+        });
+
+        req.on('response', function(res) {
+          if(res.statusCode === 200){
+            var s3Url = res.socket._httpMessage.url;
+            deferred.resolve(s3Url);
+          }
+          else {
+            deferred.reject(res);
+          }
+        });
+
+        req.end(body);
+      }
+    });
+
+    return deferred.promise;
+
+  }
 
   app.post('/update', function(req, res){
 
