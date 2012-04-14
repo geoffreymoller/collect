@@ -5,6 +5,12 @@ collect.Application = Backbone.Router.extend({
     initialize: function(){
         this.listen();
         var search = new collect.Search();
+        Handlebars.registerHelper('if_is_image', function(path) {
+          var image = /(\.jpg|\.jpeg|\.gif|\.png)$/.test(path);
+          if(image){
+            return '<a target="_blank" href="' + path + '"><img height="100" src="' + path + '"/></a>';
+          }
+        });
         Handlebars.registerHelper('date_string', function(milliseconds) {
           return collect.Model.formatDate(milliseconds);
         });
