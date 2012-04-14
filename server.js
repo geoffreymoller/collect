@@ -171,14 +171,14 @@ module.exports = function(options){
       else {
         var deferred = upload_image(uri);
         deferred.then(function(s3Url){
-          _save(s3Url);
+          _save(s3Url, ['img']);
         }, function(res){
           console.log('S3 Error: ' + res.statusCode);
           throw new Error('S3 Error: ' + res.statusCode);
         });
       }
 
-      function _save(path){
+      function _save(path, autoTags){
         var payload = {
             title: body.title,
             URI: path,
@@ -189,6 +189,9 @@ module.exports = function(options){
         var tags = body.tags;
         if(tags){
             tags = tags.split(',');
+            if(autoTags){
+              tags = tags.concat(autoTags);
+            }
             payload.tags = tags;
         }
 
