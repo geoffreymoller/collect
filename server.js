@@ -209,12 +209,15 @@ module.exports = function(options){
     request(path, {encoding: null}, function(err, res, body) {
 
       if(!err && res.statusCode == 200) {
+
         var path = res.request.path;
         if(path.indexOf('/') !== -1){
           var parts = path.split('/');
           path = parts[parts.length - 1];
         }
-        path = '/' + path;
+        var date = new Date();
+        path = '/' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + '/' + path;
+
         var req = client.put(path, {
           'Content-Type': res.headers['content-type'],
           'Content-Length': res.headers['content-length']
