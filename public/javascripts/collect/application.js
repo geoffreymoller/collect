@@ -8,7 +8,7 @@ collect.Application = Backbone.Router.extend({
         Handlebars.registerHelper('if_is_image', function(path) {
           var image = /(\.jpg|\.jpeg|\.gif|\.png)$/.test(path);
           if(image){
-            return '<a target="_blank" href="' + path + '"><img height="100" src="' + path + '"/></a>';
+            return '<a target="_blank" href="' + path + '"><img src="' + path + '"/></a>';
           }
         });
         Handlebars.registerHelper('date_string', function(milliseconds) {

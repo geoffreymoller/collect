@@ -119,6 +119,9 @@ body.vis div#search {
   list-style-type: none;
   position: relative;
 }
+#links li img {
+  max-height: 100px;
+}
 #links nav {
   padding: 0;
 }
