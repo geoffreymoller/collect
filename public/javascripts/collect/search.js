@@ -15,7 +15,7 @@ collect.Search = function(){
             var category = model.get('category');
             var value = model.get('value');
             if(params[category]){
-              params[category] = params[category] + '+' + value;
+              params[category] = params[category] + ',' + value;
             }
             else {
               params[category] = value;
