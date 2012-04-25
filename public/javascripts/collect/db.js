@@ -31,6 +31,15 @@ collect.db = function(modelCallback){
 
 }
 
+collect.db.prototype.nuke = function(){
+  //TODO - success handler
+  var request = indexedDB.deleteDatabase("links");
+  this.lastUpdated = 1;
+  setTimeout(function(){
+    window.location.reload();
+  }, 400);
+}
+
 collect.db.prototype.getLinks = function(successCallback){
   var path = this.getPath();
   var links = $.getJSON(path);

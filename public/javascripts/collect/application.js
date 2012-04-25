@@ -48,6 +48,14 @@ collect.Application = Backbone.Router.extend({
     views: {
 
         TopbarView: Backbone.View.extend({
+            initialize: function(){
+              //NUKE CLICK HACK - this view is hard-coded in page right now
+              $('#nuke').on('click', function(){
+                if(confirm('Are you sure you want to delete your local database?')){
+                  collect.model.db.nuke();
+                }
+              });
+            },
             template: "#topbar-template",
             render: function(layout) {
                 return layout(this).render();

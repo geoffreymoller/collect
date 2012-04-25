@@ -60,6 +60,13 @@ div.topbar div.topbar-inner div.container a#visuals {
   text-indent: -1000em;
   width: 29px;
 }
+div.topbar div.topbar-inner div.container div#nuke {
+  background: no-repeat url('/images/delete_small.png');
+  cursor: pointer;
+  height: 24px;
+  margin: 7px 0 0 0;
+  width: 24px;
+}
 #vis {
   margin-top: 5px;
 }
