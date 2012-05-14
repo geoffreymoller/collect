@@ -17,6 +17,15 @@ body.vis {
 body.loaded {
   padding: 80px 0 0 0;
 }
+body.loaded iframe {
+  height: 60px;
+}
+body.loaded table {
+  width: 150px;
+}
+body.loaded.iframe {
+  padding: 5px;
+}
 body.loaded div.topbar {
   display: block;
 }
@@ -59,6 +68,15 @@ div.topbar div.topbar-inner div.container a#visuals {
   padding: 0;
   text-indent: -1000em;
   width: 29px;
+}
+div.topbar div.topbar-inner div.container div#add-link {
+  color: #fff;
+  cursor: pointer;
+  margin: 11px 0 0 10px;
+  text-decoration: underline;
+}
+div.topbar div.topbar-inner div.container div#add-link:hover {
+  text-decoration: none;
 }
 div.topbar div.topbar-inner div.container div#nuke {
   background: no-repeat url('/images/delete_small.png');

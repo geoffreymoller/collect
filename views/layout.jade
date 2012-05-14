@@ -8,7 +8,7 @@ html(manifest=manifest)
       - each file in static.cssFiles
         link(rel="stylesheet", href="/stylesheets/#{file}")
 
-  body!= body
+  body(class=bodyClass)!= body
 
   - if(env === 'prod')
     script(src='javascripts/collect_all.js?#{static.javascriptHash}')

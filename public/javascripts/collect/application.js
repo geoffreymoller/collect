@@ -3,20 +3,26 @@
 collect.Application = Backbone.Router.extend({
 
     initialize: function(){
+
         this.listen();
+
         var search = new collect.Search();
+
         Handlebars.registerHelper('if_is_image', function(path) {
           var image = /(\.jpg|\.jpeg|\.gif|\.png)$/.test(path);
           if(image){
             return '<a target="_blank" href="' + path + '"><img src="' + path + '"/></a>';
           }
         });
+
         Handlebars.registerHelper('date_string', function(milliseconds) {
           return collect.Model.formatDate(milliseconds);
         });
+
         Handlebars.registerHelper('truncate', function(text, chars) {
           return goog.string.truncate(text, chars); 
         });
+
         Handlebars.registerHelper('note', function(noteText) {
           var s = '<div class="note less">';
           s += html_sanitize(noteText);
@@ -26,16 +32,20 @@ collect.Application = Backbone.Router.extend({
           s += '</div>';
           return s; 
         });
+
         collect.doc.bind('/link/delete/success', function(){
             Backbone.history.loadUrl(Backbone.history.fragment);
         });
+
         Backbone.LayoutManager.configure({
           render: function(template, context) {
             var result = Handlebars.compile(template)(context);
             return result; 
           }
         });
+
         $('body').addClass('loaded');
+
     },
 
     routes: {
@@ -55,6 +65,9 @@ collect.Application = Backbone.Router.extend({
                   collect.model.db.nuke();
                 }
               });
+              $('#add-link').on('click', function(){
+                $('#modal').modal()
+              });
             },
             template: "#topbar-template",
             render: function(layout) {
@@ -72,6 +85,71 @@ collect.Application = Backbone.Router.extend({
             },
             thresholdHandler: function(e){
               collect.doc.trigger('/chart/bubble/threshold', $(e.target).val());
+            }
+        }),
+
+        SaveView: Backbone.View.extend({
+
+            template: "#save-template",
+            initialize: function(){
+
+              var form = $('#modal').find('form');
+              var iframe = $('iframe').contents();
+              var iframeForm = iframe.find('form');
+              var urlRow = $('#modal').find('tr.url');
+              var file = {
+                input: iframe.find('input[type=file]'),
+                selected: false,
+                dateString: ''
+              };
+
+              file.input.change(function(e){
+                var value = $(this).val();
+                if(value){
+                  urlRow.hide()
+                  file.selected = true;
+                  file.value = value;
+                }
+                else { 
+                  urlRow.show();
+                  file.selected = false;
+                  file.value = null;
+                } 
+              });
+
+              $('#saveLink').click(function(e){
+                e.preventDefault();
+                
+                var uri;
+                if(file.selected){
+                  var date = new Date(collect.server.time);
+                  var year = date.getUTCFullYear();
+                  var day = date.getDate();
+                  var month = date.getMonth() + 1;
+                  var parts = file.value.split('\\');
+                  file.dateString = year + '/' + month + '/' + day + '/'
+                  var uri='http://geoffreymoller-collect.s3.amazonaws.com/' + file.dateString + parts[parts.length - 1]; 
+                  form.find('#uri').val(uri);
+                }
+                else { } //TODO - validate form
+
+                //TODO - handle failure(s)
+                var deferred = $.post('/save', form.serialize());
+                deferred.success(function(){});
+    
+                iframeForm.find('input[name=key]').val(file.dateString + '${filename}')
+                iframeForm.submit();
+
+              });
+
+              $('#container').bind('/upload/success', function(){
+                parent.$('#modal').modal('hide');
+                $('section').prepend($('<span class="label label-success">SUCCESS</span>'));
+              });
+
+            },
+            render: function(layout) {
+                return layout(this).render(this.model);
             }
         }),
 
@@ -160,6 +238,7 @@ collect.Application = Backbone.Router.extend({
             name: "#main-layout",
             views: {
                 ".topbar": new this.views.TopbarView(),
+                "#modal-container": new this.views.SaveView(),
                 "#links": new this.views.LinksView({model: {
                     tags: model.sortedTags.count.filter(function(tag){
                         return !!!relatedTags.map[tag.name];
@@ -225,7 +304,10 @@ collect.Application = Backbone.Router.extend({
                 $('#search input').focus();
                 e.preventDefault();
             }
-            if(e.charCode === 13 && e.target.id === 'searchText'){
+            else if(e.charCode === 229){
+              $('#add-link').click();
+            }
+            else if(e.charCode === 13 && e.target.id === 'searchText'){
                 var search = e.target.value;
                 this.navigate('tags/' + search, true);
                 $(e.target).select();

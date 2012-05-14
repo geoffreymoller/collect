@@ -9,6 +9,7 @@ module.exports = function(options){
   var
     conf = require('./conf').configuration,
     express = require('express'),
+    __ = require('underscore'),
     path = require('path'),
     fs = require('fs'),
     gzip = require('connect-gzip'),
@@ -52,6 +53,7 @@ module.exports = function(options){
       , 'jquery.ui.widget.js'
       , 'jquery.ui.autocomplete.js'
       , 'jquery.pagination.js'
+      , 'bootstrap-modal.js'
       , 'underscore-min.js'
       , 'handlebars-1.0.0.beta.4.js'
       , 'backbone-min.js'
@@ -104,7 +106,6 @@ module.exports = function(options){
   var manifest;
   app.configure('development', function(){
     env = 'dev';
-    port = 3000;
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
   });
 
@@ -123,12 +124,13 @@ module.exports = function(options){
       else {
         var isMobile =!!(agent.match(/(iPhone|iPod|blackberry|android 0.5|htc|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
         if(isMobile){
-            res.redirect('http://geoffreymoller.no.de/');
+          //TODO
         }
         else {
             res.render('index', {
               pageLength: argv.pageLength || conf.PAGE_LENGTH,
               title: 'Collect',
+              bodyClass: '',
               serverTime: (new Date()).getTime(),
               env: env,
               manifest: manifest,
@@ -159,13 +161,56 @@ module.exports = function(options){
 
   });
 
+  app.get('/upload', function(req, res){
+
+    res.render('upload', {
+      pageLength: argv.pageLength || conf.PAGE_LENGTH,
+      title: 'Collect',
+      bodyClass: 'iframe',
+      serverTime: (new Date()).getTime(),
+      env: env,
+      manifest: manifest,
+      options: {}, 
+      static: {
+          javascriptFiles: javascriptFiles,
+          javascriptHash: assetsManagerMiddleware.cacheHashes['js'],
+          cssFiles: cssFiles,
+          cssHash: assetsManagerMiddleware.cacheHashes['css']
+      }
+    });
+
+  });
+
+  app.get('/success', function(req, res){
+
+    res.render('success', {
+      pageLength: argv.pageLength || conf.PAGE_LENGTH,
+      title: 'Collect',
+      bodyClass: 'iframe',
+      serverTime: (new Date()).getTime(),
+      env: env,
+      manifest: manifest,
+      options: {}, 
+      static: {
+          javascriptFiles: javascriptFiles,
+          javascriptHash: assetsManagerMiddleware.cacheHashes['js'],
+          cssFiles: cssFiles,
+          cssHash: assetsManagerMiddleware.cacheHashes['css']
+      }
+    });
+
+  });
+
   app.post('/save', function(req, res){
 
       var body = req.body;
       var uri = body.uri;
       var isImage = /(\.jpg|\.jpeg|\.gif|\.png)$/.test(uri)
+      var isUpload = /s3\.amazonaws\.com\/geoffreymoller-collect/.test(uri);
 
-      if(!isImage){
+      if(!isImage || isUpload){
+        console.log('!isImage || isUpload');
+        console.log('uri: ' + uri);
         _save(uri);
       }
       else {

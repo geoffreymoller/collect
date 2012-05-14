@@ -16,7 +16,19 @@ body{
 }
 
 body.loaded {
+
+    iframe {
+      height: 60px;
+    }
+
+    table {
+      width: 150px;
+    }
+
     padding: 80px 0 0 0;
+    &.iframe {
+      padding: 5px;
+    }
     div.topbar {
       display: block;
     }
@@ -65,6 +77,15 @@ div.topbar {
                 padding: 0;
                 text-indent: -1000em;
                 width: 29px;
+            }
+            div#add-link{
+                color: #fff;
+                cursor: pointer;
+                margin: 11px 0 0 10px;
+                text-decoration: underline;
+            }
+            div#add-link:hover{
+                text-decoration: none;
             }
             div#nuke{
                 background: no-repeat url('/images/delete_small.png');
