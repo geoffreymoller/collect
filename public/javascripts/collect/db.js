@@ -48,7 +48,7 @@ collect.db.prototype.getLinks = function(successCallback){
 
 collect.db.prototype.getPath = function(){
 
-    var auth = 'sessimingreadvandedsoner:GkeRd7NkGogRQEqWRfJjS6Wd';
+    var auth = 'whestogiveryingirelonsin:gbTHEcIWtVj2KMKgli0c6jda';
     var db = 'collect';
     if(collect.options.db){
       auth = collect.options.username + ':' + collect.options.password;
