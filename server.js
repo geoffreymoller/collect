@@ -206,11 +206,8 @@ module.exports = function(options){
       var body = req.body;
       var uri = body.uri;
       var isImage = /(\.jpg|\.jpeg|\.gif|\.png)$/.test(uri)
-      var isUpload = /s3\.amazonaws\.com\/geoffreymoller-collect/.test(uri);
 
-      if(!isImage || isUpload){
-        console.log('!isImage || isUpload');
-        console.log('uri: ' + uri);
+      if(!isImage){
         _save(uri);
       }
       else {
@@ -224,6 +221,7 @@ module.exports = function(options){
       }
 
       function _save(path, autoTags){
+
         var payload = {
             title: body.title,
             URI: path,
@@ -231,13 +229,15 @@ module.exports = function(options){
             date: new Date().getTime()
         }
 
+        payload.tags = [];
         var tags = body.tags;
+
+        if(autoTags){
+          payload.tags = payload.tags.concat(autoTags);
+        }
         if(tags){
-            tags = tags.split(',');
-            if(autoTags){
-              tags = tags.concat(autoTags);
-            }
-            payload.tags = tags;
+          tags = tags.split(',');
+          payload.tags = payload.tags.concat(tags);
         }
 
         var id = uuid()

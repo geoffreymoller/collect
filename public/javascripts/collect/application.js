@@ -255,6 +255,11 @@ collect.Application = Backbone.Router.extend({
             .html(contents)
             .removeClass('vis')
             .addClass('tags')
+            .find('a.delete').each(function(index, link){
+             if(!parseInt(localStorage.deleteLinks)){
+              $(link).remove(); 
+             }
+            });
         });  
 
         pagination.paint(contextLinks.length, _.bind(function(index) {
