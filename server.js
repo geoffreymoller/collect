@@ -104,12 +104,13 @@ module.exports = function(options){
   var manifest;
   app.configure('development', function(){
     env = 'dev';
-    port = 3000;
+    port = process.env.PORT || 3000;
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
   });
 
   app.configure('production', function(){
     env = 'prod';
+    port = process.env.PORT || port;
     app.use(express.errorHandler()); 
   });
 
